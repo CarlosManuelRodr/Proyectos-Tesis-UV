@@ -1,0 +1,2178 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     84153,       2170]
+NotebookOptionsPosition[     80428,       2093]
+NotebookOutlinePosition[     81032,       2114]
+CellTagsIndexPosition[     80927,       2109]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Estrategias de trading basadas en medias m\[OAcute]viles", "Title",
+ CellChangeTimes->{{3.777400212661525*^9, 
+  3.7774002224712753`*^9}},ExpressionUUID->"43b831dd-9380-4570-8c05-\
+05f3288b120c"],
+
+Cell[CellGroupData[{
+
+Cell["Inicializaci\[OAcute]n", "Chapter",
+ CellChangeTimes->{{3.777400229667172*^9, 
+  3.77740023163906*^9}},ExpressionUUID->"ae9a1b2b-8fcc-49c9-802c-\
+32690bff9bdf"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Needs", "[", 
+   RowBox[{"\"\<AdvancedMapping`\>\"", ",", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<Extra\>\"", ",", 
+       "\"\<AdvancedMapping.wl\>\""}], "}"}], "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Needs", "[", 
+    RowBox[{"\"\<EconomicComputations`\>\"", ",", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+        "\"\<EconomicComputations.wl\>\""}], "}"}], "]"}]}], "]"}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Opciones", " ", "de", " ", "estilo"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"smallFontSize", " ", "=", " ", "13"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bigFontSize", " ", "=", " ", "15"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"plotSize", " ", "=", " ", "500"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"colors", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ColorData", "[", "\"\<Legacy\>\"", "]"}], "[", 
+      "\"\<IndianRed\>\"", "]"}], ",", "Black", ",", "Blue", ",", 
+     RowBox[{
+      RowBox[{"ColorData", "[", "\"\<Legacy\>\"", "]"}], "[", "\"\<Olive\>\"",
+       "]"}]}], "}"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.725813801477882*^9, 3.725813842354185*^9}, 
+   3.7258145952114487`*^9, {3.725815029462809*^9, 3.725815050374353*^9}, {
+   3.725822160813527*^9, 3.725822210293992*^9}, {3.725823753066257*^9, 
+   3.725823758353553*^9}, {3.7258238497826433`*^9, 3.7258238546235313`*^9}, {
+   3.725826159542289*^9, 3.725826159775069*^9}, {3.725886137582262*^9, 
+   3.725886137825506*^9}, {3.7258912353102493`*^9, 3.725891240101152*^9}, {
+   3.725908856840219*^9, 3.725908857152266*^9}, {3.7259089115580063`*^9, 
+   3.725908972319603*^9}, {3.7259090027497673`*^9, 3.725909005775334*^9}, {
+   3.725909180222677*^9, 3.7259091821578503`*^9}, {3.725909857689686*^9, 
+   3.7259098579284143`*^9}, {3.725911306756922*^9, 3.725911361342228*^9}, {
+   3.725912152652165*^9, 3.725912229638928*^9}, {3.726161944526227*^9, 
+   3.726161945773011*^9}, {3.726162117625463*^9, 3.726162117919694*^9}, {
+   3.7261623472179117`*^9, 3.726162354684567*^9}, {3.726240902388068*^9, 
+   3.726240902728302*^9}, {3.7262409758805933`*^9, 3.7262410033188047`*^9}, {
+   3.726241262768165*^9, 3.726241304212583*^9}, {3.726241408073407*^9, 
+   3.7262414175265408`*^9}, 3.726323552579049*^9, {3.7263273579102097`*^9, 
+   3.726327359364676*^9}, {3.726327490478724*^9, 3.726327492005521*^9}, {
+   3.726328254122326*^9, 3.726328257125023*^9}, {3.726328292868544*^9, 
+   3.726328302032453*^9}, {3.7263291584760113`*^9, 3.726329172180461*^9}, {
+   3.726329598747867*^9, 3.7263296020649557`*^9}, {3.7263307200371113`*^9, 
+   3.726330776967119*^9}, {3.726331621514995*^9, 3.726331622870336*^9}, {
+   3.726347600616104*^9, 3.726347608614952*^9}, {3.7263521315766897`*^9, 
+   3.726352137598084*^9}, {3.726410318377204*^9, 3.726410319653459*^9}, 
+   3.7264104024623423`*^9, {3.738611169349203*^9, 3.7386111782316427`*^9}, {
+   3.738611222933153*^9, 3.738611250476118*^9}, {3.7566544178947763`*^9, 
+   3.75665441991775*^9}, {3.756654453745466*^9, 3.756654487319433*^9}, 
+   3.7566547895902443`*^9, {3.75665485095689*^9, 3.7566548610389843`*^9}, {
+   3.761332937165599*^9, 3.761332962440831*^9}, {3.761332995433766*^9, 
+   3.7613330062208347`*^9}, 3.77547795015276*^9, {3.777400243950224*^9, 
+   3.7774002501351957`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"9ce68d2d-e508-4460-8bed-94bb1ae32a6d"],
+
+Cell[CellGroupData[{
+
+Cell["Informaci\[OAcute]n de los paquetes cargados", "Subsection",
+ CellChangeTimes->{{3.7380019972646837`*^9, 3.738002000538846*^9}, {
+  3.777400269499103*^9, 
+  3.777400277504736*^9}},ExpressionUUID->"12ca49e4-3935-4b83-8343-\
+d0bb4e5649db"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "AdvancedMapping`*"}]], "Input",
+ CellLabel->"In[25]:=",ExpressionUUID->"59beb081-dcf7-43c0-8846-e231cb53299b"],
+
+Cell[BoxData[
+ StyleBox[
+  FrameBox[GridBox[{
+     {
+      DynamicModuleBox[{Typeset`open$$ = True}, 
+       PaneSelectorBox[{False->
+        ButtonBox[
+         RowBox[{
+          
+          DynamicBox[FEPrivate`FrontEndResource[
+           "FEBitmaps", "RightPointerOpener"]], " ", 
+          StyleBox["AdvancedMapping`", "InformationGridGroupHeader"]}],
+         Appearance->None,
+         BaseStyle->"InformationGridLink",
+         ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
+         Evaluator->Automatic,
+         Method->"Preemptive"], True->
+        PaneBox[GridBox[{
+           {
+            ButtonBox[
+             RowBox[{
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], " ", 
+              StyleBox["AdvancedMapping`", "InformationGridGroupHeader"]}],
+             Appearance->None,
+             BaseStyle->"InformationGridLink",
+             ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
+             Evaluator->Automatic,
+             Method->"Preemptive"]},
+           {
+            PaneBox[GridBox[{
+               {
+                ButtonBox[
+                 StyleBox["EvaluateIfChanged", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "EvaluateIfChanged", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["LinkParallelEvaluate", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "LinkParallelEvaluate", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["NestApplyWhileList", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "NestApplyWhileList", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ProgressParallelMap", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressParallelMap", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["EvaluateOnce", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "EvaluateOnce", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["MapIf", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "MapIf", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["NestListIndexed", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "NestListIndexed", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 
+                 StyleBox["ProgressParallelMapThread", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressParallelMapThread", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["FoldWhile", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "FoldWhile", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["MapIfElse", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "MapIfElse", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ParallelMapThread", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ParallelMapThread", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ProgressParallelTable", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressParallelTable", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["FoldWhileList", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "FoldWhileList", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["MapPattern", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "MapPattern", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ProgressMap", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressMap", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ProgressTable", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressTable", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["LinkEvaluate", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "LinkEvaluate", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["NestApplyList", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "NestApplyList", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ProgressMapThread", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-abcacb4d-3e57-44e7-95f8-e95d34d0d1db", {
+                   "ProgressMapThread", "AdvancedMapping`"}, False},
+                 ButtonNote->"AdvancedMapping`",
+                 Evaluator->Automatic], ""}
+              },
+              DefaultBaseStyle->"Text",
+              
+              GridBoxAlignment->{
+               "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+              GridBoxItemSize->{"Columns" -> {{
+                   Scaled[0.2375]}}}],
+             ImageMargins->{{10, 0}, {0, 2}}]}
+          },
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
+         FrameMargins->{{0, 0}, {8, 0}}]}, Dynamic[Typeset`open$$],
+        ImageSize->Automatic]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxDividers->{"ColumnsIndexed" -> {{False}}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.8]}, 
+        Offset[0.2]}}],
+   BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
+ CellChangeTimes->{3.77740041189569*^9},
+ CellLabel->"Out[25]=",ExpressionUUID->"df75c713-92ee-47e0-90ef-f5f1154427da"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "EconomicComputations`*"}]], "Input",
+ CellChangeTimes->{3.738002019236318*^9},
+ CellLabel->"In[26]:=",ExpressionUUID->"cb496632-c25b-46cd-8244-e4e933bd96c3"],
+
+Cell[BoxData[
+ StyleBox[
+  FrameBox[GridBox[{
+     {
+      DynamicModuleBox[{Typeset`open$$ = True}, 
+       PaneSelectorBox[{False->
+        ButtonBox[
+         RowBox[{
+          
+          DynamicBox[FEPrivate`FrontEndResource[
+           "FEBitmaps", "RightPointerOpener"]], " ", 
+          StyleBox["EconomicComputations`", "InformationGridGroupHeader"]}],
+         Appearance->None,
+         BaseStyle->"InformationGridLink",
+         ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
+         Evaluator->Automatic,
+         Method->"Preemptive"], True->
+        PaneBox[GridBox[{
+           {
+            ButtonBox[
+             RowBox[{
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], " ", 
+              
+              StyleBox["EconomicComputations`", 
+               "InformationGridGroupHeader"]}],
+             Appearance->None,
+             BaseStyle->"InformationGridLink",
+             ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
+             Evaluator->Automatic,
+             Method->"Preemptive"]},
+           {
+            PaneBox[GridBox[{
+               {
+                ButtonBox[
+                 StyleBox["AddKeyToMarket", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "AddKeyToMarket", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ExportDatabase", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "ExportDatabase", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["Returns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "Returns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["AddToDataset", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "AddToDataset", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ExportMarket", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "ExportMarket", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["RightCutoff", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "RightCutoff", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["CalculateCutoff", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "CalculateCutoff", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["ExtremeEventThreshold", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "ExtremeEventThreshold", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 
+                 StyleBox["SelectDatedGaussianReturns", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "SelectDatedGaussianReturns", "EconomicComputations`"}, 
+                   False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DatasetBuilderDialog", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatasetBuilderDialog", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["FindImportantDates", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "FindImportantDates", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["SelectGaussianReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "SelectGaussianReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DatedReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatedReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["GetExtremeEventDates", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "GetExtremeEventDates", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["SimpleReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "SimpleReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DatedSimpleReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatedSimpleReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 
+                 StyleBox["GetExtremeEventDateValues", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "GetExtremeEventDateValues", "EconomicComputations`"}, 
+                   False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["TrendDuration", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "TrendDuration", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DatedTrendDuration", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatedTrendDuration", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["KullbackLeibler", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "KullbackLeibler", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["TrendReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "TrendReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DatedTrendReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatedTrendReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["KullbackLeiblerInTime", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "KullbackLeiblerInTime", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 
+                 StyleBox["UncorrelatedMultiscaleReturns", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "UncorrelatedMultiscaleReturns", "EconomicComputations`"}, 
+                   False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 
+                 StyleBox["DatedVelocityTrendReturns", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DatedVelocityTrendReturns", "EconomicComputations`"}, 
+                   False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["LeftCutoff", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "LeftCutoff", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["UncorrelatedReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "UncorrelatedReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 
+                 StyleBox["DetendedMultiscaleReturns", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DetendedMultiscaleReturns", "EconomicComputations`"}, 
+                   False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["MultiscaleReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "MultiscaleReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["UpwardTrendDuration", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "UpwardTrendDuration", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DetrendedReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DetrendedReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PowerLawAndersonDarling", "InformationGridButton"],
+                 
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "PowerLawAndersonDarling", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["VelocityTrendReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "VelocityTrendReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DownwardTrendDuration", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "DownwardTrendDuration", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PricesFromReturns", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "PricesFromReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], ""},
+               {
+                ButtonBox[
+                 StyleBox["EventProbability", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "EventProbability", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PricesFromSimpleReturns", "InformationGridButton"],
+                 
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-136c4867-2782-48d1-b6af-30079f2b3532", {
+                   "PricesFromSimpleReturns", "EconomicComputations`"}, False},
+                 ButtonNote->"EconomicComputations`",
+                 Evaluator->Automatic], ""}
+              },
+              DefaultBaseStyle->"Text",
+              
+              GridBoxAlignment->{
+               "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+              GridBoxItemSize->{"Columns" -> {{
+                   Scaled[0.31666666666666665`]}}}],
+             ImageMargins->{{10, 0}, {0, 2}}]}
+          },
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
+         FrameMargins->{{0, 0}, {8, 0}}]}, Dynamic[Typeset`open$$],
+        ImageSize->Automatic]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxDividers->{"ColumnsIndexed" -> {{False}}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.8]}, 
+        Offset[0.2]}}],
+   BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
+ CellChangeTimes->{3.7774004144927673`*^9},
+ CellLabel->"Out[26]=",ExpressionUUID->"b1dd4bfa-e889-40f3-aa1c-c0b19d889e35"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = False, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"\\!\\(\\*\\nStyleBox[\\\"PricesFromReturns\\\",\\\
+nFontWeight->\\\"Bold\\\"]\\)[\\!\\(\\*\\nStyleBox[\\\"returns\\\",\\\
+nFontSlant->\\\"Italic\\\"]\\)] return prices from logarithmic returns with \
+lag 1.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Definitions\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Definitions", "Tooltip"]& ], GridBox[{
+                    {
+                    RowBox[{
+                    RowBox[{
+                    "PricesFromReturns", "[", 
+                    "EconomicComputations`Private`returns_", "]"}], ":=", 
+                    RowBox[{"Block", "[", 
+                    RowBox[{
+                    RowBox[{"{", "EconomicComputations`Private`acc", "}"}], 
+                    ",", 
+                    RowBox[{
+                    RowBox[{"EconomicComputations`Private`acc", "=", 
+                    RowBox[{
+                    "Accumulate", "[", "EconomicComputations`Private`returns",
+                     "]"}]}], ";", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Exp", "[", "#1", "]"}], "-", "1"}], "&"}], ")"}],
+                     "/@", 
+                    RowBox[{"(", 
+                    RowBox[{"EconomicComputations`Private`acc", "-", 
+                    RowBox[{
+                    "Min", "[", "EconomicComputations`Private`acc", "]"}]}], 
+                    ")"}]}]}]}], "]"}]}]}
+                    },
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], \
+"\<\"EconomicComputations`PricesFromReturns\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"]], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"\\!\\(\\*\\nStyleBox[\\\"PricesFromReturns\\\",\\\
+nFontWeight->\\\"Bold\\\"]\\)[\\!\\(\\*\\nStyleBox[\\\"returns\\\",\\\
+nFontSlant->\\\"Italic\\\"]\\)] return prices from logarithmic returns with \
+lag 1.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> 
+    "\!\(\*\nStyleBox[\"PricesFromReturns\",\nFontWeight->\"Bold\"]\)[\!\(\*\n\
+StyleBox[\"returns\",\nFontSlant->\"Italic\"]\)] return prices from \
+logarithmic returns with lag 1.", "Documentation" -> None, "OwnValues" -> 
+    None, "UpValues" -> None, "DownValues" -> 
+    Information`InformationValueForm[
+     DownValues, EconomicComputations`PricesFromReturns, {
+      EconomicComputations`PricesFromReturns[
+         Pattern[EconomicComputations`Private`returns, 
+          Blank[]]] :> 
+       Block[{EconomicComputations`Private`acc}, 
+         EconomicComputations`Private`acc = 
+          Accumulate[EconomicComputations`Private`returns]; 
+         Map[Exp[#] - 1& , EconomicComputations`Private`acc - Min[
+           EconomicComputations`Private`acc]]]}], "SubValues" -> None, 
+    "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> None, 
+    "Options" -> None, "Attributes" -> {}, "FullName" -> 
+    "EconomicComputations`PricesFromReturns"], False]]], "Print",
+ CellTags->
+  "Info-136c4867-2782-48d1-b6af-30079f2b3532",ExpressionUUID->"0edb7e62-49c2-\
+48c7-9543-54a490746bb3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Cargar base de datos", "Chapter",
+ CellChangeTimes->{{3.777400301087185*^9, 
+  3.777400304329691*^9}},ExpressionUUID->"5cc92109-5078-4b33-9581-\
+462906b374da"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"path", " ", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+      "\"\<DJI_DAX_MXX_NIKKEI_dataset.mx\>\""}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"database", " ", "=", " ", 
+   RowBox[{"Import", "[", "path", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"database", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "\"\<Name\>\""}], "]"}], "]"}], " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<DJIA\>\"", ",", "\"\<DAX\>\"", ",", "\"\<IPC\>\"", ",", 
+     "\"\<Nikkei 225\>\""}], "}"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.725908928874539*^9, {3.7386112566008368`*^9, 3.7386112689098263`*^9}, {
+   3.7564739455548563`*^9, 3.756473966482794*^9}, {3.756477138657824*^9, 
+   3.7564771389575453`*^9}, {3.76133308942835*^9, 3.761333091876583*^9}, {
+   3.771960534143981*^9, 3.771960545447304*^9}, {3.772036063276965*^9, 
+   3.7720360665464077`*^9}, {3.772036241194306*^9, 3.77203625287162*^9}, {
+   3.775477961165186*^9, 3.775477969288271*^9}, 3.7754780131425*^9, {
+   3.777400341397171*^9, 3.777400351848933*^9}, {3.777400447901471*^9, 
+   3.777400460342659*^9}, {3.777400507434965*^9, 3.777400507705071*^9}, {
+   3.777400572427231*^9, 3.7774005725833693`*^9}, {3.777400609877466*^9, 
+   3.777400611273203*^9}, {3.777745852325385*^9, 3.77774585359934*^9}},
+ CellLabel->"In[11]:=",ExpressionUUID->"857b1afa-f812-49ea-9b91-0ec6c50440ec"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["C\[AAcute]lculo de entrop\[IAcute]a", "Chapter",
+ CellChangeTimes->{{3.777746521703298*^9, 
+  3.777746526127014*^9}},ExpressionUUID->"dd8c2521-df9b-427a-91ff-\
+1a100cc4da00"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"market", " ", "=", " ", 
+   RowBox[{"First", "[", "database", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.777745943642992*^9, 3.777745962215589*^9}},
+ CellLabel->"In[15]:=",ExpressionUUID->"0ac0be99-4039-45f8-88c2-47a120ee98e3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Histogram", "[", 
+  RowBox[{"market", "[", "\"\<Returns\>\"", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.777745968963414*^9, 3.777745976734967*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"4323506b-522d-4d54-a411-fc3c099b3af0"],
+
+Cell[BoxData[
+ GraphicsBox[{
+   {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+    Opacity[0.5599999999999999], Thickness[Small]}], {}, 
+    {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+     Opacity[0.5599999999999999], Thickness[Small]}], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.075, 0}, {-0.07, 5.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{-67.84087269815848, -49.86022151054172}, {
+           89.16392819957115, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 5]& ,
+        TagBoxNote->"5"],
+       StyleBox["5", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[5, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.07, 0}, {-0.065, 2.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{-50.36022151054172, -32.37957032292496}, {
+           89.58632374408636, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 2]& ,
+        TagBoxNote->"2"],
+       StyleBox["2", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[2, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.065, 0}, {-0.06, 8.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{-32.87957032292496, -14.898919135308176`}, {
+           88.74153265505595, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 8]& ,
+        TagBoxNote->"8"],
+       StyleBox["8", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[8, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.06, 0}, {-0.055, 7.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{-15.398919135308176`, 2.581732052308581}, {
+           88.88233116989434, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 7]& ,
+        TagBoxNote->"7"],
+       StyleBox["7", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[7, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.055, 0}, {-0.05, 20.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{2.081732052308581, 20.06238323992531}, {
+           87.05195047699512, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 20]& ,
+        TagBoxNote->"20"],
+       StyleBox["20", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[20, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.05, 0}, {-0.045, 15.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{19.56238323992531, 37.543034427542096`}, {
+           87.75594305118713, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 15]& ,
+        TagBoxNote->"15"],
+       StyleBox["15", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[15, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.045, 0}, {-0.04, 16.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{37.043034427542096`, 55.023685615158854`}, {
+           87.61514453634872, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 16]& ,
+        TagBoxNote->"16"],
+       StyleBox["16", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[16, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.04, 0}, {-0.035, 27.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{54.523685615158854`, 72.5043368027756}, {
+           86.0663608731263, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 27]& ,
+        TagBoxNote->"27"],
+       StyleBox["27", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[27, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.035, 0}, {-0.03, 61.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{72.0043368027756, 89.98498799039237}, {
+           81.27921136862062, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 61]& ,
+        TagBoxNote->"61"],
+       StyleBox["61", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[61, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.03, 0}, {-0.025, 99.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{89.48498799039237, 107.46563917800911`}, {
+           75.92886780476134, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 99]& ,
+        TagBoxNote->"99"],
+       StyleBox["99", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[99, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.025, 0}, {-0.02, 166.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{106.96563917800911`, 124.94629036562588`}, {
+           66.49536731058839, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 166]& ,
+        TagBoxNote->"166"],
+       StyleBox["166", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[166, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.02, 0}, {-0.015, 273.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{124.44629036562588`, 142.42694155324264`}, {
+           51.429926222879345`, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 273]& ,
+        TagBoxNote->"273"],
+       StyleBox["273", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[273, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.015, 0}, {-0.01, 461.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{141.92694155324264`, 159.9075927408594}, {
+           24.959805433259717`, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 461]& ,
+        TagBoxNote->"461"],
+       StyleBox["461", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[461, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.01, 0}, {-0.005, 685.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{159.4075927408594, 
+           177.38824392847616`}, {-6.579061890542377, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 685]& ,
+        TagBoxNote->"685"],
+       StyleBox["685", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[685, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{-0.005, 0}, {0., 1159.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{176.88824392847616`, 
+           194.86889511609292`}, {-73.31755792394506, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 1159]& ,
+        TagBoxNote->"1159"],
+       StyleBox["1159", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[1159, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0., 0}, {0.005, 1338.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{194.36889511609292`, 
+           212.34954630370967`}, {-98.52049208001904, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 1338]& ,
+        TagBoxNote->"1338"],
+       StyleBox["1338", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[1338, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.005, 0}, {0.01, 873.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{211.84954630370967`, 
+           229.83019749132643`}, {-33.049182680162005`, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 873]& ,
+        TagBoxNote->"873"],
+       StyleBox["873", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[873, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.01, 0}, {0.015, 548.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{229.33019749132643`, 247.3108486789432}, {
+           12.710334642318728`, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 548]& ,
+        TagBoxNote->"548"],
+       StyleBox["548", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[548, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.015, 0}, {0.02, 296.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{246.8108486789432, 264.79149986655995`}, {
+           48.19156038159609, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 296]& ,
+        TagBoxNote->"296"],
+       StyleBox["296", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[296, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.02, 0}, {0.025, 185.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{264.29149986655995`, 282.27215105417673`}, {
+           63.82019552865874, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 185]& ,
+        TagBoxNote->"185"],
+       StyleBox["185", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[185, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.025, 0}, {0.03, 90.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{281.77215105417673`, 299.75280224179346`}, {
+           77.19605443830696, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 90]& ,
+        TagBoxNote->"90"],
+       StyleBox["90", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[90, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.03, 0}, {0.035, 60.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{299.25280224179346`, 317.23345342941025`}, {
+           81.42000988345903, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 60]& ,
+        TagBoxNote->"60"],
+       StyleBox["60", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[60, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.035, 0}, {0.04, 22.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{316.73345342941025`, 334.714104617027}, {
+           86.77035344731831, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 22]& ,
+        TagBoxNote->"22"],
+       StyleBox["22", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[22, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.04, 0}, {0.045, 12.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{334.214104617027, 352.1947558046437}, {
+           88.17833859570233, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 12]& ,
+        TagBoxNote->"12"],
+       StyleBox["12", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[12, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.045, 0}, {0.05, 10.}, "RoundingRadius" -> 0]},
+          ImageSizeCache->{{351.6947558046437, 369.6754069922605}, {
+           88.45993562537913, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 10]& ,
+        TagBoxNote->"10"],
+       StyleBox["10", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[10, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.05, 0}, {0.055, 10.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{369.1754069922605, 387.1560581798773}, {
+           88.45993562537913, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 10]& ,
+        TagBoxNote->"10"],
+       StyleBox["10", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[10, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.055, 0}, {0.06, 6.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{386.6560581798773, 404.636709367494}, {
+           89.02312968473275, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 6]& ,
+        TagBoxNote->"6"],
+       StyleBox["6", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[6, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.06, 0}, {0.065, 1.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{404.136709367494, 422.1173605551108}, {
+           89.72712225892475, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 1]& ,
+        TagBoxNote->"1"],
+       StyleBox["1", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[1, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.065, 0}, {0.07, 4.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{421.6173605551108, 439.5980117427275}, {
+           89.30472671440955, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 4]& ,
+        TagBoxNote->"4"],
+       StyleBox["4", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[4, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.07, 0}, {0.075, 2.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{439.0980117427275, 457.0786629303443}, {
+           89.58632374408636, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 2]& ,
+        TagBoxNote->"2"],
+       StyleBox["2", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[2, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.075, 0}, {0.08, 1.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{456.5786629303443, 474.55931411796104`}, {
+           89.72712225892475, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 1]& ,
+        TagBoxNote->"1"],
+       StyleBox["1", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[1, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.095, 0}, {0.1, 1.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{526.5012676808113, 544.4819188684281}, {
+           89.72712225892475, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 1]& ,
+        TagBoxNote->"1"],
+       StyleBox["1", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[1, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        TagBox[
+         DynamicBox[{
+           FEPrivate`If[
+            CurrentValue["MouseOver"], 
+            EdgeForm[{
+              GrayLevel[0.5], 
+              AbsoluteThickness[1.5], 
+              Opacity[0.66]}], {}, {}], 
+           RectangleBox[{0.105, 0}, {0.11, 2.}, "RoundingRadius" -> 0]},
+          
+          ImageSizeCache->{{561.4625700560448, 579.4432212436616}, {
+           89.58632374408636, 90.36792077376316}}],
+         "DelayedMouseEffectStyle"],
+        StatusArea[#, 2]& ,
+        TagBoxNote->"2"],
+       StyleBox["2", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[2, {}], "Tooltip"]& ]}, {}, {}}, {{}, {}, {}, {}, {}, {}, {}, {},
+     {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, \
+{}, {}, {}, {}, {}, {}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{-0.0468, 0},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  PlotRange->NCache[{{
+      Rational[-9, 200], 
+      Rational[9, 200]}, {All, All}}, {{-0.045, 0.045}, {All, All}}],
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.02], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.7777459715752163`*^9, 3.77774597709616*^9}},
+ CellLabel->"Out[17]=",ExpressionUUID->"d96f8008-7576-4016-86b2-47c63c73cf4c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"quantiles", " ", "=", " ", 
+  RowBox[{"Quantile", "[", 
+   RowBox[{
+    RowBox[{"market", "[", "\"\<Returns\>\"", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], ",", 
+      RowBox[{"1", "/", "2"}], ",", 
+      RowBox[{"3", "/", "4"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.777745988498863*^9, 3.7777460127163267`*^9}, {
+  3.7777461328844757`*^9, 3.777746134202167*^9}},
+ CellLabel->"In[19]:=",ExpressionUUID->"76ba2d14-6d7b-4b5d-9153-c27dce69bd9f"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "0.006502553665791666`"}], ",", "0.0008798961815497108`", ",",
+    "0.007631870577611721`"}], "}"}]], "Output",
+ CellChangeTimes->{3.777746012838951*^9, 3.7777461347007837`*^9},
+ CellLabel->"Out[19]=",ExpressionUUID->"c7307194-11f7-4130-8912-fdb7977bbb59"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"intervals", " ", "=", " ", 
+  RowBox[{"Partition", "[", 
+   RowBox[{
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"-", "\[Infinity]"}], "}"}], ",", "quantiles", ",", 
+      RowBox[{"{", "\[Infinity]", "}"}]}], "]"}], ",", "2", ",", "1"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.777746135680694*^9, 3.777746179825437*^9}, {
+   3.777746235628523*^9, 3.777746243217574*^9}, 3.777746329756699*^9},
+ CellLabel->"In[27]:=",ExpressionUUID->"2f700c5d-8a73-4a2c-b17a-4c04d3ad45e1"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "\[Infinity]"}], ",", 
+     RowBox[{"-", "0.006502553665791666`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "0.006502553665791666`"}], ",", "0.0008798961815497108`"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.0008798961815497108`", ",", "0.007631870577611721`"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{"0.007631870577611721`", ",", "\[Infinity]"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.777746140164219*^9, 3.777746180041894*^9}, 
+   3.777746243358226*^9, 3.777746330429098*^9},
+ CellLabel->"Out[27]=",ExpressionUUID->"44fe8891-db64-4490-a29f-27be732265ec"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"discreteStates", " ", "=", " ", 
+  RowBox[{"Range", "[", 
+   RowBox[{"Length", "[", "intervals", "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7777462704601517`*^9, 3.7777462847131643`*^9}},
+ CellLabel->"In[26]:=",ExpressionUUID->"54fdd37b-6108-44f2-8147-06bdfb42cf57"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}]], "Output",
+ CellChangeTimes->{3.777746285201151*^9},
+ CellLabel->"Out[26]=",ExpressionUUID->"85634b1d-57b1-4202-bf55-e97b9a90015a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"rules", " ", "=", " ", 
+  RowBox[{"MapThread", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"x_", "/;", 
+       RowBox[{"IntervalMemberQ", "[", 
+        RowBox[{
+         RowBox[{"Interval", "[", "#1", "]"}], ",", "x"}], "]"}]}], "\[Rule]",
+       "#2"}], "&"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"intervals", ",", "discreteStates"}], "}"}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.777746296861561*^9, 3.777746316456352*^9}, {
+  3.7777463585524473`*^9, 3.7777464203926477`*^9}},
+ CellLabel->"In[30]:=",ExpressionUUID->"f9ca41fd-171c-4c12-b240-afeae049f1c3"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"x_", "/;", 
+     RowBox[{"IntervalMemberQ", "[", 
+      RowBox[{
+       RowBox[{"Interval", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "\[Infinity]"}], ",", 
+          RowBox[{"-", "0.006502553665791666`"}]}], "}"}], "]"}], ",", "x"}], 
+      "]"}]}], "\[Rule]", "1"}], ",", 
+   RowBox[{
+    RowBox[{"x_", "/;", 
+     RowBox[{"IntervalMemberQ", "[", 
+      RowBox[{
+       RowBox[{"Interval", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "0.006502553665791666`"}], ",", 
+          "0.0008798961815497108`"}], "}"}], "]"}], ",", "x"}], "]"}]}], 
+    "\[Rule]", "2"}], ",", 
+   RowBox[{
+    RowBox[{"x_", "/;", 
+     RowBox[{"IntervalMemberQ", "[", 
+      RowBox[{
+       RowBox[{"Interval", "[", 
+        RowBox[{"{", 
+         RowBox[{"0.0008798961815497108`", ",", "0.007631870577611721`"}], 
+         "}"}], "]"}], ",", "x"}], "]"}]}], "\[Rule]", "3"}], ",", 
+   RowBox[{
+    RowBox[{"x_", "/;", 
+     RowBox[{"IntervalMemberQ", "[", 
+      RowBox[{
+       RowBox[{"Interval", "[", 
+        RowBox[{"{", 
+         RowBox[{"0.007631870577611721`", ",", "\[Infinity]"}], "}"}], "]"}], 
+       ",", "x"}], "]"}]}], "\[Rule]", "4"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.7777464066168003`*^9, 3.777746420527663*^9}},
+ CellLabel->"Out[30]=",ExpressionUUID->"e391c34d-9925-4d0f-afaf-3052ee9569c8"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"discretization", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"market", "[", "\"\<Returns\>\"", "]"}], "/.", " ", "rules"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.777746426760113*^9, 3.77774645162403*^9}},
+ CellLabel->"In[32]:=",ExpressionUUID->"aead035b-23fd-45f7-9ee1-2a81751f806f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Entropy", "[", "discretization", "]"}]], "Input",
+ CellChangeTimes->{{3.7777464576327553`*^9, 3.77774646023214*^9}},
+ CellLabel->"In[33]:=",ExpressionUUID->"aff01fb3-7d7e-4344-9762-47ec2c9ea9eb"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "4848"}], " ", 
+     RowBox[{"Log", "[", "1616", "]"}]}], "-", 
+    RowBox[{"1617", " ", 
+     RowBox[{"Log", "[", "1617", "]"}]}]}], "6465"], "+", 
+  RowBox[{"Log", "[", "6465", "]"}]}]], "Output",
+ CellChangeTimes->{3.777746460348589*^9},
+ CellLabel->"Out[33]=",ExpressionUUID->"84ca50e4-40d1-4e58-a8d4-47289b983d65"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{"Entropy", "[", "discretization", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.777746471397189*^9, 3.777746472319718*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"5d390db5-25b1-4746-867f-e55ae4a89756"],
+
+Cell[BoxData["1.3862943252351823`"], "Output",
+ CellChangeTimes->{3.777746472452363*^9},
+ CellLabel->"Out[34]=",ExpressionUUID->"0923d498-787c-4273-b209-79b393357f4d"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1858, 1013},
+WindowMargins->{{Automatic, 0}, {0, Automatic}},
+FrontEndVersion->"12.0 for Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info-136c4867-2782-48d1-b6af-30079f2b3532"->{
+  Cell[36559, 846, 10987, 268, 89, "Print",ExpressionUUID->"0edb7e62-49c2-48c7-9543-54a490746bb3",
+   CellTags->"Info-136c4867-2782-48d1-b6af-30079f2b3532"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info-136c4867-2782-48d1-b6af-30079f2b3532", 80745, 2103}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 201, 3, 99, "Title",ExpressionUUID->"43b831dd-9380-4570-8c05-05f3288b120c"],
+Cell[CellGroupData[{
+Cell[806, 29, 166, 3, 70, "Chapter",ExpressionUUID->"ae9a1b2b-8fcc-49c9-802c-32690bff9bdf"],
+Cell[975, 34, 3710, 72, 213, "Input",ExpressionUUID->"9ce68d2d-e508-4460-8bed-94bb1ae32a6d",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[4710, 110, 243, 4, 55, "Subsection",ExpressionUUID->"12ca49e4-3935-4b83-8343-d0bb4e5649db"],
+Cell[CellGroupData[{
+Cell[4978, 118, 139, 2, 31, "Input",ExpressionUUID->"59beb081-dcf7-43c0-8846-e231cb53299b"],
+Cell[5120, 122, 10984, 254, 184, "Output",ExpressionUUID->"df75c713-92ee-47e0-90ef-f5f1154427da"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16141, 381, 186, 3, 31, "Input",ExpressionUUID->"cb496632-c25b-46cd-8244-e4e933bd96c3"],
+Cell[16330, 386, 20226, 458, 368, "Output",ExpressionUUID->"b1dd4bfa-e889-40f3-aa1c-c0b19d889e35"],
+Cell[36559, 846, 10987, 268, 89, "Print",ExpressionUUID->"0edb7e62-49c2-48c7-9543-54a490746bb3",
+ CellTags->"Info-136c4867-2782-48d1-b6af-30079f2b3532"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47607, 1121, 165, 3, 70, "Chapter",ExpressionUUID->"5cc92109-5078-4b33-9581-462906b374da"],
+Cell[47775, 1126, 1550, 33, 94, "Input",ExpressionUUID->"857b1afa-f812-49ea-9b91-0ec6c50440ec",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[49362, 1164, 180, 3, 70, "Chapter",ExpressionUUID->"dd8c2521-df9b-427a-91ff-1a100cc4da00"],
+Cell[49545, 1169, 267, 5, 31, "Input",ExpressionUUID->"0ac0be99-4039-45f8-88c2-47a120ee98e3"],
+Cell[CellGroupData[{
+Cell[49837, 1178, 254, 4, 31, "Input",ExpressionUUID->"4323506b-522d-4d54-a411-fc3c099b3af0"],
+Cell[50094, 1184, 24115, 719, 239, "Output",ExpressionUUID->"d96f8008-7576-4016-86b2-47c63c73cf4c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[74246, 1908, 515, 12, 31, "Input",ExpressionUUID->"76ba2d14-6d7b-4b5d-9153-c27dce69bd9f"],
+Cell[74764, 1922, 312, 6, 35, "Output",ExpressionUUID->"c7307194-11f7-4130-8912-fdb7977bbb59"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75113, 1933, 532, 12, 31, "Input",ExpressionUUID->"2f700c5d-8a73-4a2c-b17a-4c04d3ad45e1"],
+Cell[75648, 1947, 699, 19, 35, "Output",ExpressionUUID->"44fe8891-db64-4490-a29f-27be732265ec"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[76384, 1971, 295, 5, 31, "Input",ExpressionUUID->"54fdd37b-6108-44f2-8147-06bdfb42cf57"],
+Cell[76682, 1978, 214, 4, 35, "Output",ExpressionUUID->"85634b1d-57b1-4202-bf55-e97b9a90015a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[76933, 1987, 603, 16, 31, "Input",ExpressionUUID->"f9ca41fd-171c-4c12-b240-afeae049f1c3"],
+Cell[77539, 2005, 1413, 40, 59, "Output",ExpressionUUID->"e391c34d-9925-4d0f-afaf-3052ee9569c8"]
+}, Open  ]],
+Cell[78967, 2048, 320, 7, 31, "Input",ExpressionUUID->"aead035b-23fd-45f7-9ee1-2a81751f806f"],
+Cell[CellGroupData[{
+Cell[79312, 2059, 219, 3, 31, "Input",ExpressionUUID->"aff01fb3-7d7e-4344-9762-47ec2c9ea9eb"],
+Cell[79534, 2064, 401, 11, 54, "Output",ExpressionUUID->"84ca50e4-40d1-4e58-a8d4-47289b983d65"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[79972, 2080, 246, 4, 31, "Input",ExpressionUUID->"5d390db5-25b1-4746-867f-e55ae4a89756"],
+Cell[80221, 2086, 167, 2, 35, "Output",ExpressionUUID->"0923d498-787c-4273-b209-79b393357f4d"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
