@@ -1,0 +1,766 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     29989,        758]
+NotebookOptionsPosition[     27277,        708]
+NotebookOutlinePosition[     27612,        723]
+CellTagsIndexPosition[     27569,        720]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Tesis de Sara", "Title",
+ CellChangeTimes->{{3.7667549919166307`*^9, 
+  3.76675499365379*^9}},ExpressionUUID->"08bc9de7-4e47-4562-825a-\
+c2ab9c2310a2"],
+
+Cell["\<\
+Dale a \[OpenCurlyDoubleQuote]Evaluaci\[OAcute]n -> Evaluar cuaderno\
+\[CloseCurlyDoubleQuote] para obtener los resultados.\
+\>", "Text",
+ CellChangeTimes->{{3.7667759764316463`*^9, 
+  3.766776003421648*^9}},ExpressionUUID->"2563c09e-6ee8-4864-8f3e-\
+178a0265db39"],
+
+Cell[CellGroupData[{
+
+Cell["Centro de masa de aut\[OAcute]mata celular", "Chapter",
+ CellChangeTimes->{{3.766754996110417*^9, 3.7667550205038033`*^9}, 
+   3.766776014078738*^9},ExpressionUUID->"c02b0e43-53ac-4695-9ed1-\
+386649f37fc3"],
+
+Cell["\<\
+Registra el movimiento del centro de masa de un aut\[OAcute]mata celular y \
+grafica la serie de tiempo y la distribuci\[OAcute]n de sus retornos.\
+\>", "Text",
+ CellChangeTimes->{{3.766776016524132*^9, 
+  3.766776053907568*^9}},ExpressionUUID->"e6f5d69f-50e0-4d02-a188-\
+cb65e4b19a7f"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"RCM", "[", "ca_", "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n", " ", "=", " ", 
+       RowBox[{"Length", "[", "ca", "]"}]}], "}"}], ",", 
+     RowBox[{"Abs", "[", 
+      RowBox[{"N", "[", 
+       RowBox[{
+        FractionBox["1", "n"], 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"ca", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], 
+           RowBox[{"(", 
+            RowBox[{"i", "-", 
+             RowBox[{"n", "/", "2"}]}], ")"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", "n"}], "}"}]}], "]"}]}], "]"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CATimeSeries", "[", 
+    RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+   RowBox[{"Map", "[", 
+    RowBox[{"RCM", ",", 
+     RowBox[{"CellularAutomaton", "[", 
+      RowBox[{"rule", ",", 
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"1", ",", "length"}], "]"}], ",", "iterations"}], "]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Returns", "[", 
+    RowBox[{"x_", ",", "\[CapitalDelta]t_"}], "]"}], ":=", " ", 
+   RowBox[{"N", "[", 
+    RowBox[{
+     RowBox[{"Log", "[", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"x", ",", "\[CapitalDelta]t"}], "]"}], "]"}], "-", 
+     RowBox[{"Log", "[", 
+      RowBox[{"Take", "[", 
+       RowBox[{"x", ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", 
+          RowBox[{"-", 
+           RowBox[{"(", 
+            RowBox[{"1", "+", "\[CapitalDelta]t"}], ")"}]}]}], "}"}]}], "]"}],
+       "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"PlotCAResults", "[", 
+    RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ts", ",", "ret", ",", "tsPlot", ",", "distPlot"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ts", " ", "=", " ", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"CATimeSeries", "[", 
+          RowBox[{"rule", ",", "length", ",", "iterations"}], "]"}], ",", 
+         "Indeterminate"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ret", " ", "=", " ", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"Returns", "[", 
+          RowBox[{"ts", ",", "1"}], "]"}], ",", "Indeterminate"}], "]"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"tsPlot", " ", "=", " ", 
+       RowBox[{"ListLinePlot", "[", "ts", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"distPlot", " ", "=", " ", 
+       RowBox[{"SmoothHistogram", "[", 
+        RowBox[{"ret", ",", 
+         RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"Labeled", "[", 
+       RowBox[{
+        RowBox[{"Panel", "[", 
+         RowBox[{"Column", "[", 
+          RowBox[{"{", 
+           RowBox[{"tsPlot", ",", "distPlot"}], "}"}], "]"}], "]"}], ",", 
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"\"\<Rule \>\"", ",", " ", 
+          RowBox[{"ToString", "[", "rule", "]"}]}], "]"}], ",", "Top"}], 
+       "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7667518476960583`*^9, 3.7667519290323477`*^9}, {
+  3.7667528617713947`*^9, 3.766752869414432*^9}, {3.7667532166416063`*^9, 
+  3.766753293125983*^9}, {3.7667542216762114`*^9, 3.766754231985661*^9}, {
+  3.7667542692141333`*^9, 3.766754283828624*^9}, {3.766754697270836*^9, 
+  3.766754713324792*^9}, {3.7667573458019047`*^9, 3.7667574022000847`*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"c0d34e22-b26e-48f9-93f4-3d278f3466e2"],
+
+Cell[BoxData[
+ RowBox[{"PlotCAResults", "[", 
+  RowBox[{"2", ",", "500", ",", "800"}], "]"}]], "Input",
+ CellChangeTimes->{3.7667545582357197`*^9},
+ CellLabel->"In[16]:=",ExpressionUUID->"98ea5633-4174-4cad-9694-096df37103a9"],
+
+Cell[CellGroupData[{
+
+Cell["Probar con todas la reglas del aut\[OAcute]mata celular", "Subsection",
+ CellChangeTimes->{{3.766760699300362*^9, 3.7667607020014677`*^9}, {
+  3.766776059644524*^9, 
+  3.766776071037656*^9}},ExpressionUUID->"1870833b-f0c2-4c0d-9581-\
+0feab45cae52"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"plots", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PlotCAResults", "[", 
+      RowBox[{"i", ",", "500", ",", "800"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "255"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.76675205577151*^9, 3.7667521202479343`*^9}, {
+  3.7667525233865223`*^9, 3.766752523708009*^9}, {3.766753447436214*^9, 
+  3.766753454216823*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"8b1a99fa-bf26-45cb-8659-c513ceb69ef6"],
+
+Cell[BoxData[
+ RowBox[{"Grid", "[", 
+  RowBox[{"Partition", "[", 
+   RowBox[{"plots", ",", 
+    RowBox[{"UpTo", "[", "8", "]"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.766752384754014*^9, 3.7667523853924913`*^9}, {
+  3.766758554502096*^9, 3.766758581772109*^9}},
+ CellLabel->"In[18]:=",ExpressionUUID->"a144e442-b555-46ea-81c0-a5178c20fa43"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Distribuci\[OAcute]n de la riqueza", "Chapter",
+ CellChangeTimes->{{3.7667550505811653`*^9, 
+  3.766755058365777*^9}},ExpressionUUID->"ad5b0ed7-f140-4fa8-9d16-\
+63fdf78ad6b4"],
+
+Cell["Calcula distribuci\[OAcute]n de la riqueza y el coeficiente de Gini.", \
+"Text",
+ CellChangeTimes->{{3.766776084125269*^9, 
+  3.766776097923896*^9}},ExpressionUUID->"6130446d-cfc5-4ad4-aa5d-\
+2818f7bf30e9"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"CAWealth", "[", 
+    RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+   RowBox[{"Map", "[", 
+    RowBox[{"Total", ",", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"CellularAutomaton", "[", 
+       RowBox[{"rule", ",", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"1", ",", "length"}], "]"}], ",", "iterations"}], "]"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CAWealth", "[", "ca_", "]"}], ":=", 
+   RowBox[{"Map", "[", 
+    RowBox[{"Total", ",", 
+     RowBox[{"Transpose", "[", "ca", "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"GiniIndex", "[", "individuals_", "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "underlyingMean", ",", "underlyingStandardDeviation", ",", 
+       "cumulativeWealth", ",", "normalizedCumulativeWealth", ",", 
+       "\[ScriptCapitalD]", ",", "giniValues", ",", "wealth", ",", 
+       RowBox[{"samplesize", " ", "=", " ", 
+        RowBox[{"Length", "[", "individuals", "]"}]}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"wealth", " ", "=", " ", 
+       RowBox[{"individuals", "-", 
+        RowBox[{"Min", "[", "individuals", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"underlyingMean", "=", 
+       RowBox[{"Mean", "[", "wealth", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"underlyingStandardDeviation", "=", 
+       RowBox[{"StandardDeviation", "[", "wealth", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"cumulativeWealth", " ", "=", " ", 
+       RowBox[{"Accumulate", "[", 
+        RowBox[{"Sort", "[", "wealth", "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"normalizedCumulativeWealth", " ", "=", " ", 
+       RowBox[{"N", "[", 
+        FractionBox["cumulativeWealth", 
+         RowBox[{"Max", "[", "cumulativeWealth", "]"}]], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"giniValues", "=", 
+       RowBox[{"N", "[", 
+        RowBox[{"2", 
+         RowBox[{"MapThread", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"#1", "-", "#2"}], "&"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Range", "[", 
+              RowBox[{
+               RowBox[{"1", "/", "samplesize"}], ",", "1", ",", 
+               RowBox[{"1", "/", "samplesize"}]}], "]"}], ",", 
+             "normalizedCumulativeWealth"}], "}"}]}], "]"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"Mean", "[", "giniValues", "]"}]}]}], "\[IndentingNewLine]", 
+    "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"GiniPlot", "[", "individuals_", "]"}], ":=", 
+    RowBox[{"Block", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "underlyingMean", ",", "underlyingStandardDeviation", ",", 
+        "cumulativeWealth", ",", "normalizedCumulativeWealth", ",", 
+        "\[ScriptCapitalD]", ",", "giniValues", ",", "wealth", ",", 
+        RowBox[{"samplesize", " ", "=", " ", 
+         RowBox[{"Length", "[", "individuals", "]"}]}]}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"wealth", " ", "=", " ", 
+        RowBox[{"individuals", "-", 
+         RowBox[{"Min", "[", "individuals", "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"underlyingMean", "=", 
+        RowBox[{"Mean", "[", "wealth", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"underlyingStandardDeviation", "=", 
+        RowBox[{"StandardDeviation", "[", "wealth", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"cumulativeWealth", " ", "=", " ", 
+        RowBox[{"Accumulate", "[", 
+         RowBox[{"Sort", "[", "wealth", "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"normalizedCumulativeWealth", " ", "=", " ", 
+        RowBox[{"N", "[", 
+         FractionBox["cumulativeWealth", 
+          RowBox[{"Max", "[", "cumulativeWealth", "]"}]], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"\[ScriptCapitalD]", "=", 
+        RowBox[{"EmpiricalDistribution", "[", "wealth", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"giniValues", "=", 
+        RowBox[{"N", "[", 
+         RowBox[{"2", 
+          RowBox[{"MapThread", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"#1", "-", "#2"}], "&"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Range", "[", 
+               RowBox[{
+                RowBox[{"1", "/", "samplesize"}], ",", "1", ",", 
+                RowBox[{"1", "/", "samplesize"}]}], "]"}], ",", 
+              "normalizedCumulativeWealth"}], "}"}]}], "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"ListLinePlot", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"normalizedCumulativeWealth", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"samplesize", ",", 
+               RowBox[{"Last", "@", "normalizedCumulativeWealth"}]}], "}"}]}],
+             "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"BaseStyle", "\[Rule]", 
+          RowBox[{"FontSize", "\[Rule]", "11"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"PlotStyle", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"Thickness", "[", "0.01", "]"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Dashing", "[", 
+               RowBox[{"{", 
+                RowBox[{"0.005", ",", "0.02"}], "}"}], "]"}], ",", 
+              RowBox[{"Thickness", "[", "0.01", "]"}]}], "}"}]}], "}"}]}], 
+         ",", "\[IndentingNewLine]", 
+         RowBox[{"Filling", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"2", "\[Rule]", 
+            RowBox[{"{", "1", "}"}]}], "}"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"FillingStyle", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"{", 
+            RowBox[{"RGBColor", "[", 
+             RowBox[{
+             "0.40784313725490196`", ",", "0.24313725490196078`", ",", 
+              "0.20784313725490197`", ",", "0.3"}], "]"}], "}"}], "}"}]}], 
+         ",", 
+         RowBox[{"Epilog", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"Inset", "[", 
+            RowBox[{
+             RowBox[{"Plot", "[", 
+              RowBox[{
+               RowBox[{"CDF", "[", 
+                RowBox[{"\[ScriptCapitalD]", ",", "x"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"x", ",", "0", ",", 
+                 RowBox[{"underlyingMean", "+", 
+                  RowBox[{"3", "underlyingStandardDeviation"}]}]}], "}"}], 
+               ",", 
+               RowBox[{"Axes", "\[Rule]", "False"}], ",", 
+               RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+               RowBox[{"FrameLabel", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                 "\"\<wealth\>\"", ",", "\"\<cumulative probability\>\""}], 
+                 "}"}]}], ",", 
+               RowBox[{"PlotLabel", "\[Rule]", 
+                RowBox[{"Pane", "[", 
+                 RowBox[{
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                   "\"\<cumulative distribution of wealth\>\"", ",", "10"}], 
+                   "]"}], ",", "144"}], "]"}]}], ",", 
+               RowBox[{"Background", "\[Rule]", 
+                RowBox[{"RGBColor", "[", 
+                 RowBox[{"0.8", ",", "0.5", ",", "0.5", ",", "0.3"}], "]"}]}],
+                ",", 
+               RowBox[{"ImageSize", "\[Rule]", 
+                RowBox[{"2.25", "*", "72"}]}], ",", 
+               RowBox[{"ImagePadding", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"42", ",", "20"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"35", ",", "20"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+             
+             RowBox[{"Scaled", "[", 
+              RowBox[{"{", 
+               RowBox[{"0.58", ",", "0.54"}], "}"}], "]"}], ",", 
+             RowBox[{"ImageScaled", "[", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "]"}]}], "]"}], "}"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"PlotLabel", "\[Rule]", 
+          RowBox[{"Grid", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"\"\<Lorenz curve\>\"", ",", "SpanFromLeft"}], "}"}], 
+              ",", 
+              RowBox[{"{", 
+               RowBox[{"\"\<Gini coefficient\>\"", ",", 
+                RowBox[{"NumberForm", "[", 
+                 RowBox[{
+                  RowBox[{"Mean", "[", "giniValues", "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"4", ",", "3"}], "}"}]}], "]"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"\"\<Wealth generated\>\"", ",", 
+                RowBox[{"Total", "[", "wealth", "]"}]}], "}"}]}], "}"}], ",", 
+            
+            RowBox[{"Dividers", "\[Rule]", "All"}], ",", 
+            RowBox[{"Background", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"None", ",", 
+               RowBox[{"{", 
+                RowBox[{"RGBColor", "[", 
+                 RowBox[{
+                 "0.803921568627451`", ",", "0.6862745098039216`", ",", 
+                  "0.6039215686274509`"}], "]"}], "}"}]}], "}"}]}]}], "]"}]}],
+          ",", "\[IndentingNewLine]", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "1"}], "}"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", "\[IndentingNewLine]", 
+         
+         RowBox[{"Axes", "\[Rule]", "False"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"Frame", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"FrameLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<percentile of population (sorted by wealth)\>\"", ",", 
+            "\"\<percentile of wealth owned\>\""}], "}"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"FrameTicks", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"i", "*", "samplesize"}], ",", 
+                RowBox[{"ToString", "[", "i", "]"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"i", ",", "0", ",", "1", ",", "0.1"}], "}"}]}], "]"}], 
+            ",", "Automatic"}], "}"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"ImageSize", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"450", ",", "400"}], "}"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"ImagePadding", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"35", ",", "10"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"40", ",", "60"}], "}"}]}], "}"}]}]}], 
+        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CAPlotWealthDistribbution", "[", 
+     RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+    RowBox[{"SmoothHistogram", "[", 
+     RowBox[{
+      RowBox[{"CAWealth", "[", 
+       RowBox[{"rule", ",", "length", ",", "iterations"}], "]"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"PlotCAWealthResults", "[", 
+     RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+    RowBox[{"Block", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "ca", ",", "caPlot", ",", "individuals", ",", "distPlot", ",", 
+        "giniPlot"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ca", " ", "=", " ", 
+        RowBox[{"CellularAutomaton", "[", 
+         RowBox[{"rule", ",", 
+          RowBox[{"RandomInteger", "[", 
+           RowBox[{"1", ",", "length"}], "]"}], ",", "iterations"}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"individuals", " ", "=", " ", 
+        RowBox[{"CAWealth", "[", "ca", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"distPlot", " ", "=", " ", 
+        RowBox[{"Histogram", "[", 
+         RowBox[{
+         "individuals", ",", "Automatic", ",", "\"\<Probability\>\"", ",", 
+          RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+          RowBox[{"ImageSize", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"450", ",", "400"}], "}"}]}], ",", 
+          RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+          RowBox[{"FrameLabel", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Wealth\>\"", ",", "\"\<Percentage\>\""}], "}"}]}], 
+          ",", 
+          RowBox[{"PlotLabel", "\[Rule]", "\"\<Distribution\>\""}]}], "]"}]}],
+        ";", "\[IndentingNewLine]", 
+       RowBox[{"giniPlot", " ", "=", " ", 
+        RowBox[{"GiniPlot", "[", "individuals", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"caPlot", " ", "=", " ", 
+        RowBox[{"ArrayPlot", "[", 
+         RowBox[{"ca", ",", 
+          RowBox[{"ImageSize", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"450", ",", "400"}], "}"}]}], ",", 
+          RowBox[{"PlotLabel", "\[Rule]", "\"\<CA Plot\>\""}]}], "]"}]}], ";",
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"Rasterize", "@", 
+        RowBox[{"Labeled", "[", 
+         RowBox[{
+          RowBox[{"Panel", "[", 
+           RowBox[{"Column", "[", 
+            RowBox[{"{", 
+             RowBox[{"distPlot", ",", "giniPlot", ",", "caPlot"}], "}"}], 
+            "]"}], "]"}], ",", 
+          RowBox[{"StringJoin", "[", 
+           RowBox[{"\"\<Rule \>\"", ",", " ", 
+            RowBox[{"ToString", "[", "rule", "]"}]}], "]"}], ",", "Top"}], 
+         "]"}]}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"GiniReport", "[", 
+    RowBox[{"rule_", ",", "length_", ",", "iterations_"}], "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ca", " ", "=", " ", 
+       RowBox[{"CAWealth", "[", 
+        RowBox[{"rule", ",", "length", ",", "iterations"}], "]"}]}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"rule", ",", 
+       RowBox[{
+        RowBox[{"Total", "[", "ca", "]"}], "-", 
+        RowBox[{"Min", "[", "ca", "]"}]}], ",", 
+       RowBox[{"GiniIndex", "[", "ca", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBmIQvUrzpUiLwBtH83cvxUH0wasC8iC65k+TKojOi+R4
+D6J7WNPA9A+xqJ8gmq03EUzPqdRjawXSAq82i4LojTkbZUD0w/jXYFrZ28YW
+RLteL3QE0V9uv9kGoi/fid4Jok22e7K2Aeknnulg+nsEmxiIrmB8Kg6iM2KD
+rEC0Uf15MB2oFOYPol9bPAsC0TfMbZNA9L8v31NA9AzWp/Ugek+/eBOILvjX
+vqwN7A+nbWBzdGeeAdETquzOgmi5itUvQfS2G4fB9DKVn29B9M2DSz6BaC33
+M/btQPqXloYDiAYAdIiQHA==
+  "],
+ CellLabel->"In[19]:=",ExpressionUUID->"749cb592-b543-4644-86ec-2357ea20f708"],
+
+Cell["Ordenar por GINI", "Text",
+ CellChangeTimes->{{3.766758195236001*^9, 
+  3.7667581979166403`*^9}},ExpressionUUID->"2a3e4e91-914c-43a7-ace9-\
+cbf9aec92fb2"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ginis", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"GiniReport", "[", 
+      RowBox[{"i", ",", "1000", ",", "1000"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "255"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.766757911020331*^9, 3.7667579220336018`*^9}, {
+   3.766757957122109*^9, 3.76675796224279*^9}, 3.766759516225936*^9},
+ CellLabel->"In[26]:=",ExpressionUUID->"907a65fd-6ae2-4308-b574-04a6377367f1"],
+
+Cell[BoxData[
+ RowBox[{"Dataset", "[", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Rule\>\"", ",", "\"\<Wealth generated\>\"", ",", "\"\<Gini\>\""}], 
+      "}"}], "}"}], ",", 
+    RowBox[{"Reverse", "[", 
+     RowBox[{"SortBy", "[", 
+      RowBox[{"ginis", ",", "Last"}], "]"}], "]"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7667580990625257`*^9, 3.766758101235079*^9}, 
+   3.766759523596724*^9},
+ CellLabel->"In[27]:=",ExpressionUUID->"a74a5d84-7b01-4cd6-9fa5-ae78b5a9f970"],
+
+Cell["Valores de GINI", "Text",
+ CellChangeTimes->{{3.766758791877413*^9, 
+  3.766758795192584*^9}},ExpressionUUID->"626c759d-2bcc-4ca0-9913-\
+68d2be1cba40"],
+
+Cell[BoxData[
+ RowBox[{"ListLinePlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"SortBy", "[", 
+     RowBox[{"ginis", ",", "Last"}], "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "3"}], "]"}], "]"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+   RowBox[{"FrameLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Rank\>\"", ",", "\"\<Gini\>\""}], "}"}]}]}], "]"}]], "Input",\
+
+ CellChangeTimes->{{3.766758798460294*^9, 3.7667588158589354`*^9}, {
+  3.766759530024974*^9, 3.76675953016728*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"3f88ddef-74cc-4b93-a963-f4f064483d39"],
+
+Cell[BoxData[
+ RowBox[{"PlotCAWealthResults", "[", 
+  RowBox[{"3", ",", "1000", ",", "1000"}], "]"}]], "Input",
+ CellChangeTimes->{3.76676072941361*^9},
+ CellLabel->"In[29]:=",ExpressionUUID->"de8398d3-1cc0-46c5-a441-8807ff1082b2"],
+
+Cell[CellGroupData[{
+
+Cell["Ordenar por mayor GINI", "Subsection",
+ CellChangeTimes->{{3.766758208933272*^9, 3.76675821325358*^9}, {
+  3.766775926577429*^9, 
+  3.766775930702795*^9}},ExpressionUUID->"7040ac07-c31c-4af8-a7a0-\
+0926eb6bc74b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"niceRules", " ", "=", " ", 
+   RowBox[{"Take", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Reverse", "[", 
+       RowBox[{"SortBy", "[", 
+        RowBox[{"ginis", ",", "Last"}], "]"}], "]"}], "[", 
+      RowBox[{"[", 
+       RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", "40"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dists", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PlotCAWealthResults", "[", 
+      RowBox[{"i", ",", "1000", ",", "1000"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "niceRules"}], "}"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.76675822257626*^9, 3.766758222805791*^9}},
+ CellLabel->"In[30]:=",ExpressionUUID->"455143d3-b971-4a2e-a5bc-6ca1d5a9a6a6"],
+
+Cell[BoxData[
+ RowBox[{"Grid", "[", 
+  RowBox[{"Partition", "[", 
+   RowBox[{"dists", ",", 
+    RowBox[{"UpTo", "[", "3", "]"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.766758224413764*^9, 3.766758224993063*^9}, {
+  3.766758608831661*^9, 3.7667586233065577`*^9}},
+ CellLabel->"In[32]:=",ExpressionUUID->"696bf27f-947d-454a-87fa-92ee9151fe0e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Todos los resultados", "Subsection",
+ CellChangeTimes->{{3.7667582039795094`*^9, 
+  3.766758206660005*^9}},ExpressionUUID->"f8490c9a-3d83-4f02-8a9b-\
+118786b188bb"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dists", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PlotCAWealthResults", "[", 
+      RowBox[{"i", ",", "1000", ",", "1000"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "255"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.766755683261673*^9, 3.766755690709444*^9}, 
+   3.76675762464039*^9},
+ CellLabel->"In[33]:=",ExpressionUUID->"1e3ec7d4-88b5-45a0-a3b9-5add3a5e879f"],
+
+Cell[BoxData[
+ RowBox[{"ImageAssemble", "[", 
+  RowBox[{"Partition", "[", 
+   RowBox[{"dists", ",", "3"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.766762014832515*^9, 3.7667620276299667`*^9}, {
+  3.766762205811059*^9, 3.766762246587008*^9}, {3.7667624109477386`*^9, 
+  3.766762422239008*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"1e389a9c-1bd8-47ed-b60f-5868f0e32f90"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1861, 1013},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+FrontEndVersion->"12.0 para Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 157, 3, 99, "Title",ExpressionUUID->"08bc9de7-4e47-4562-825a-c2ab9c2310a2"],
+Cell[740, 27, 275, 6, 36, "Text",ExpressionUUID->"2563c09e-6ee8-4864-8f3e-178a0265db39"],
+Cell[CellGroupData[{
+Cell[1040, 37, 212, 3, 70, "Chapter",ExpressionUUID->"c02b0e43-53ac-4695-9ed1-386649f37fc3"],
+Cell[1255, 42, 296, 6, 36, "Text",ExpressionUUID->"e6f5d69f-50e0-4d02-a188-cb65e4b19a7f"],
+Cell[1554, 50, 3792, 98, 296, "Input",ExpressionUUID->"c0d34e22-b26e-48f9-93f4-3d278f3466e2",
+ InitializationCell->True],
+Cell[5349, 150, 226, 4, 31, "Input",ExpressionUUID->"98ea5633-4174-4cad-9694-096df37103a9"],
+Cell[CellGroupData[{
+Cell[5600, 158, 254, 4, 55, "Subsection",ExpressionUUID->"1870833b-f0c2-4c0d-9581-0feab45cae52"],
+Cell[5857, 164, 534, 12, 31, "Input",ExpressionUUID->"8b1a99fa-bf26-45cb-8659-c513ceb69ef6"],
+Cell[6394, 178, 350, 7, 31, "Input",ExpressionUUID->"a144e442-b555-46ea-81c0-a5178c20fa43"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6793, 191, 181, 3, 70, "Chapter",ExpressionUUID->"ad5b0ed7-f140-4fa8-9d16-63fdf78ad6b4"],
+Cell[6977, 196, 212, 4, 36, "Text",ExpressionUUID->"6130446d-cfc5-4ad4-aa5d-2818f7bf30e9"],
+Cell[7192, 202, 15399, 369, 1421, "Input",ExpressionUUID->"749cb592-b543-4644-86ec-2357ea20f708",
+ InitializationCell->True],
+Cell[22594, 573, 160, 3, 36, "Text",ExpressionUUID->"2a3e4e91-914c-43a7-ace9-cbf9aec92fb2"],
+Cell[22757, 578, 505, 11, 31, "Input",ExpressionUUID->"907a65fd-6ae2-4308-b574-04a6377367f1"],
+Cell[23265, 591, 541, 14, 31, "Input",ExpressionUUID->"a74a5d84-7b01-4cd6-9fa5-ae78b5a9f970"],
+Cell[23809, 607, 157, 3, 36, "Text",ExpressionUUID->"626c759d-2bcc-4ca0-9913-68d2be1cba40"],
+Cell[23969, 612, 594, 15, 31, "Input",ExpressionUUID->"3f88ddef-74cc-4b93-a963-f4f064483d39"],
+Cell[24566, 629, 231, 4, 31, "Input",ExpressionUUID->"de8398d3-1cc0-46c5-a441-8807ff1082b2"],
+Cell[CellGroupData[{
+Cell[24822, 637, 218, 4, 55, "Subsection",ExpressionUUID->"7040ac07-c31c-4af8-a7a0-0926eb6bc74b"],
+Cell[25043, 643, 785, 21, 55, "Input",ExpressionUUID->"455143d3-b971-4a2e-a5bc-6ca1d5a9a6a6"],
+Cell[25831, 666, 350, 7, 31, "Input",ExpressionUUID->"696bf27f-947d-454a-87fa-92ee9151fe0e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26218, 678, 170, 3, 55, "Subsection",ExpressionUUID->"f8490c9a-3d83-4f02-8a9b-118786b188bb"],
+Cell[26391, 683, 466, 11, 31, "Input",ExpressionUUID->"1e3ec7d4-88b5-45a0-a3b9-5add3a5e879f"],
+Cell[26860, 696, 377, 7, 31, "Input",ExpressionUUID->"1e389a9c-1bd8-47ed-b60f-5868f0e32f90"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

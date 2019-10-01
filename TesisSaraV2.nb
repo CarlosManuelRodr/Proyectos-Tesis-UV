@@ -1,0 +1,4839 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    187087,       4831]
+NotebookOptionsPosition[    182735,       4750]
+NotebookOutlinePosition[    183100,       4766]
+CellTagsIndexPosition[    183057,       4763]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Tesis de Sara v2.0", "Title",
+ CellChangeTimes->{{3.778441036730296*^9, 
+  3.7784410402925453`*^9}},ExpressionUUID->"bf6b66a1-1bcf-4733-8098-\
+afe7700b6d01"],
+
+Cell["Inicializaci\[OAcute]n", "Subtitle",
+ CellChangeTimes->{{3.7784420588135233`*^9, 
+  3.778442060706521*^9}},ExpressionUUID->"a1f0fc8c-8187-4043-b5e1-\
+fcf45bd90f28"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<AdvancedMapping`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.778442108816828*^9, 3.7784421174266243`*^9}},
+ CellLabel->"In[48]:=",ExpressionUUID->"21b76f3d-42f1-457c-bfee-eca3960e9bde"],
+
+Cell[CellGroupData[{
+
+Cell["Caracterizaci\[OAcute]n de la estabilidad de los aut\[OAcute]matas \
+celulares", "Subtitle",
+ CellChangeTimes->{{3.77844206629909*^9, 
+  3.77844208148691*^9}},ExpressionUUID->"9ec9427d-3a52-4e80-921c-\
+c3f216c3fc22"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"StillOrPeriodicQ", "[", 
+    RowBox[{"a1_", ",", "a2_", ",", "a3_"}], "]"}], ":=", 
+   RowBox[{"Or", "[", 
+    RowBox[{
+     RowBox[{"SameQ", "[", 
+      RowBox[{"a1", ",", "a2"}], "]"}], ",", 
+     RowBox[{"SameQ", "[", 
+      RowBox[{"a1", ",", "a3"}], "]"}], ",", 
+     RowBox[{"SameQ", "[", 
+      RowBox[{"a2", ",", "a3"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"TestStillnessOrPeriodicity", "[", 
+    RowBox[{"rule_", ",", "maxIterations_"}], "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"initialConfiguration", ",", "ca"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"initialConfiguration", " ", "=", " ", 
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"1", ",", "100"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ca", " ", "=", " ", 
+       RowBox[{"NestWhileList", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CellularAutomaton", "[", 
+           RowBox[{"rule", ",", "#"}], "]"}], "&"}], ",", 
+         "initialConfiguration", ",", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"StillOrPeriodicQ", "[", "##", "]"}]}], "&"}], ",", "3", 
+         ",", "maxIterations"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", "ca", "]"}], "\[Equal]", 
+         RowBox[{"maxIterations", "+", "1"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "False", "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "True", "]"}]}], "\[IndentingNewLine]", "]"}], 
+      ";"}]}], "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"TestStability", "[", 
+    RowBox[{"rule_", ",", "maxIterations_", ",", "repeats_"}], "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", "results", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"results", " ", "=", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"TestStillnessOrPeriodicity", "[", 
+          RowBox[{"rule", ",", "maxIterations"}], "]"}], ",", "repeats"}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"Apply", "[", 
+         RowBox[{"And", ",", "results"}], "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "\"\<Stable\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"!", 
+             RowBox[{"Apply", "[", 
+              RowBox[{"And", ",", "results"}], "]"}]}], "&&", " ", 
+            RowBox[{"Apply", "[", 
+             RowBox[{"Or", ",", "results"}], "]"}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Return", "[", "\"\<Mixed\>\"", "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Return", "[", "\"\<Unstable\>\"", "]"}]}], 
+          "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}],
+       ";"}]}], "\[IndentingNewLine]", "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.77844136475861*^9, 3.778441392410654*^9}, {
+  3.778441455444206*^9, 3.778441560938129*^9}, {3.778441594854146*^9, 
+  3.778441704196266*^9}, {3.778441773094871*^9, 3.778441968200676*^9}, {
+  3.7784420075613337`*^9, 3.7784420303156357`*^9}},
+ CellLabel->"In[44]:=",ExpressionUUID->"5865ed37-d493-46f3-b5c4-49c79427e2b0"],
+
+Cell["\<\
+Primero caracterizamos los aut\[OAcute]matas celulares seg\[UAcute]n si son \
+capaces de tener estados estables (no nos interesan las reglas que nunca \
+llegan a un estado de estabilidad)\
+\>", "Text",
+ CellChangeTimes->{{3.7784488739504766`*^9, 
+  3.778448927923911*^9}},ExpressionUUID->"db7bf400-51a4-4cd9-8578-\
+3378dd790086"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"results", " ", "=", " ", 
+   RowBox[{"ProgressTable", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"r", ",", 
+       RowBox[{"TestStability", "[", 
+        RowBox[{"r", ",", "1000", ",", "50"}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"r", ",", "0", ",", "255"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.778441709639043*^9, 3.7784417533477373`*^9}, {
+  3.77844197404736*^9, 3.778441978035213*^9}, {3.778442032607232*^9, 
+  3.778442042274981*^9}, {3.778442128575745*^9, 3.778442131795813*^9}, {
+  3.778442440387763*^9, 3.7784424404590893`*^9}, {3.7784425009337873`*^9, 
+  3.778442501039966*^9}},
+ CellLabel->"In[71]:=",ExpressionUUID->"24613078-7616-465e-b542-a278628136d1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"decoratedResults", " ", "=", " ", 
+   RowBox[{"ReplaceAll", "[", 
+    RowBox[{"results", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<Unstable\>\"", "\[Rule]", 
+        RowBox[{"Style", "[", 
+         RowBox[{"\"\<Unstable\>\"", ",", "Red"}], "]"}]}], ",", 
+       RowBox[{"\"\<Mixed\>\"", "\[Rule]", 
+        RowBox[{"Style", "[", 
+         RowBox[{"\"\<Mixed\>\"", ",", "Orange"}], "]"}]}], ",", 
+       RowBox[{"\"\<Stable\>\"", "\[Rule]", 
+        RowBox[{"Style", "[", 
+         RowBox[{"\"\<Stable\>\"", ",", "Green"}], "]"}]}]}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{"Partition", "[", 
+   RowBox[{
+    RowBox[{"Prepend", "[", 
+     RowBox[{"decoratedResults", ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<Regla\>\"", ",", "\"\<Resultado\>\""}], "}"}]}], "]"}], 
+    ",", 
+    RowBox[{"UpTo", "[", "10", "]"}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7784422478822117`*^9, 3.77844241629626*^9}},
+ CellLabel->"In[73]:=",ExpressionUUID->"e3226a7e-788b-4333-8898-adfe01d8a494"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     RowBox[{"{", 
+      RowBox[{"\<\"Regla\"\>", ",", "\<\"Resultado\"\>"}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"2", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"3", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"4", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"5", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"6", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"7", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"8", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"9", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"10", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"11", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"12", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"13", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"14", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"15", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"16", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"17", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"18", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"19", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"20", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"21", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"22", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"23", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"24", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"25", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"26", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"27", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"28", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"29", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"30", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"31", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"32", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"33", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"34", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"35", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"36", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"37", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"38", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"39", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"40", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"41", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"42", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"43", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"44", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"45", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"46", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"47", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"48", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"49", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"50", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"51", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"52", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"53", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"54", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"55", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"56", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"57", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"58", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"59", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"60", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"61", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"62", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"63", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"64", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"65", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"66", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"67", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"68", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"69", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"70", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"71", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"72", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"73", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"74", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"75", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"76", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"77", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"78", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"79", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"80", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"81", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"82", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"83", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"84", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"85", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"86", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"87", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"88", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"89", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"90", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"91", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"92", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"93", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"94", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"95", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"96", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"97", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"98", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"99", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"100", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"101", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"102", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"103", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"104", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"105", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"106", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"107", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"108", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"109", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"110", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"111", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"112", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"113", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"114", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"115", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"116", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"117", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"118", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"119", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"120", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"121", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"122", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"123", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"124", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"125", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"126", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"127", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"128", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"129", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"130", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"131", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"132", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"133", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"134", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"135", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"136", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"137", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"138", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"139", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"140", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"141", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"142", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"143", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"144", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"145", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"146", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"147", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"148", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"149", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"150", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"151", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"152", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"153", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"154", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"155", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"156", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"157", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"158", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"159", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"160", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"161", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"162", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"163", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"164", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"165", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"166", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"167", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"168", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"169", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"170", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"171", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"172", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"173", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"174", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"175", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"176", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"177", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"178", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"179", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"180", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"181", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"182", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"183", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"184", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"185", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"186", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"187", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"188", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"189", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"190", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"191", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"192", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"193", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"194", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"195", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"196", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"197", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"198", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"199", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"200", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"201", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"202", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"203", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"204", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"205", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"206", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"207", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"208", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"209", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"210", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"211", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"212", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"213", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"214", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"215", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"216", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"217", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"218", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"219", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"220", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"221", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"222", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"223", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"224", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"225", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"226", ",", 
+       StyleBox["\<\"Mixed\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0.5, 0],
+        FrontFaceColor->RGBColor[1, 0.5, 0],
+        BackFaceColor->RGBColor[1, 0.5, 0],
+        GraphicsColor->RGBColor[1, 0.5, 0],
+        FontColor->RGBColor[1, 0.5, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"227", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"228", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"229", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"230", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"231", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"232", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"233", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"234", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"235", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"236", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"237", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"238", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"239", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"240", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"241", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"242", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"243", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"244", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"245", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"246", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"247", ",", 
+       StyleBox["\<\"Unstable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[1, 0, 0],
+        FrontFaceColor->RGBColor[1, 0, 0],
+        BackFaceColor->RGBColor[1, 0, 0],
+        GraphicsColor->RGBColor[1, 0, 0],
+        FontColor->RGBColor[1, 0, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"248", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}]},
+    {
+     RowBox[{"{", 
+      RowBox[{"249", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"250", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"251", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"252", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"253", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"254", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], 
+     RowBox[{"{", 
+      RowBox[{"255", ",", 
+       StyleBox["\<\"Stable\"\>",
+        StripOnInput->False,
+        LineColor->RGBColor[0, 1, 0],
+        FrontFaceColor->RGBColor[0, 1, 0],
+        BackFaceColor->RGBColor[0, 1, 0],
+        GraphicsColor->RGBColor[0, 1, 0],
+        FontColor->RGBColor[0, 1, 0]]}], "}"}], "", "", ""}
+   },
+   AutoDelete->False,
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.778442416534092*^9, 3.778442479124991*^9, 
+  3.778442574530088*^9},
+ CellLabel->"Out[74]=",ExpressionUUID->"d99151ed-0670-427f-99f6-73f39167d0c9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"stableRules", " ", "=", " ", 
+  RowBox[{"Cases", "[", 
+   RowBox[{"results", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x_", ",", "\"\<Stable\>\""}], "}"}], "\[RuleDelayed]", "x"}]}],
+    "]"}]}]], "Input",
+ CellChangeTimes->{{3.778442486342832*^9, 3.7784424956228867`*^9}, {
+   3.7784425893317213`*^9, 3.778442611998434*^9}, 3.7784431080699997`*^9},
+ CellLabel->"In[89]:=",ExpressionUUID->"113b95dd-b71e-49c2-89e9-137e40f68ba6"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0", ",", "1", ",", "4", ",", "5", ",", "8", ",", "12", ",", "13", ",", 
+   "19", ",", "23", ",", "28", ",", "29", ",", "32", ",", "33", ",", "36", 
+   ",", "37", ",", "40", ",", "44", ",", "50", ",", "51", ",", "55", ",", 
+   "64", ",", "68", ",", "69", ",", "70", ",", "71", ",", "72", ",", "76", 
+   ",", "77", ",", "78", ",", "79", ",", "91", ",", "92", ",", "93", ",", 
+   "95", ",", "96", ",", "100", ",", "104", ",", "108", ",", "123", ",", 
+   "127", ",", "128", ",", "132", ",", "136", ",", "140", ",", "141", ",", 
+   "156", ",", "157", ",", "160", ",", "164", ",", "168", ",", "172", ",", 
+   "178", ",", "179", ",", "192", ",", "196", ",", "197", ",", "198", ",", 
+   "199", ",", "200", ",", "201", ",", "202", ",", "203", ",", "204", ",", 
+   "205", ",", "206", ",", "207", ",", "216", ",", "217", ",", "218", ",", 
+   "219", ",", "220", ",", "221", ",", "222", ",", "223", ",", "224", ",", 
+   "228", ",", "232", ",", "233", ",", "234", ",", "235", ",", "236", ",", 
+   "237", ",", "238", ",", "239", ",", "248", ",", "249", ",", "250", ",", 
+   "251", ",", "252", ",", "253", ",", "254", ",", "255"}], "}"}]], "Output",
+ CellChangeTimes->{3.778443109377398*^9},
+ CellLabel->"Out[89]=",ExpressionUUID->"54958d7e-77ab-4414-9cbb-bf2c8df0765a"]
+}, Open  ]],
+
+Cell["\<\
+Prueba de estabilidad trivial, es decir, se seleccionan las reglas que no \
+convergen siempre a la misma configuraci\[OAcute]n con diferentes condiciones \
+iniciales\
+\>", "Text",
+ CellChangeTimes->{{3.778443092101677*^9, 3.7784430966770697`*^9}, {
+  3.7784477645070143`*^9, 3.7784477676572247`*^9}, {3.7784489323034773`*^9, 
+  3.7784489763843803`*^9}},ExpressionUUID->"6ea37b25-8cc8-441e-b8ed-\
+eaa383a249fd"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"GetStableConfiguration", "[", 
+    RowBox[{"rule_", ",", "initialConfiguration_", ",", 
+     RowBox[{"maxIterations_", " ", ":", "100"}]}], "]"}], ":=", 
+   RowBox[{"Last", "[", 
+    RowBox[{"NestWhileList", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"CellularAutomaton", "[", 
+        RowBox[{"rule", ",", "#"}], "]"}], "&"}], ",", "initialConfiguration",
+       ",", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"StillOrPeriodicQ", "[", "##", "]"}]}], "&"}], ",", "3", ",", 
+      "maxIterations"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"IsTriviallyStable", "[", 
+    RowBox[{"rule_", ",", "maxIterations_", ",", "repeats_"}], "]"}], ":=", 
+   RowBox[{"Apply", "[", 
+    RowBox[{"SameQ", ",", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"GetStableConfiguration", "[", 
+        RowBox[{"rule", ",", 
+         RowBox[{"RandomInteger", "[", 
+          RowBox[{"1", ",", "100"}], "]"}], ",", "maxIterations"}], "]"}], 
+       ",", "repeats"}], "]"}]}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7784427292068367`*^9, 3.778442790974506*^9}, {
+  3.7784433126530857`*^9, 
+  3.778443312909172*^9}},ExpressionUUID->"41d634e1-1177-4b0c-ae6c-\
+5485ee235e59"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"trivialStabilityResults", " ", "=", " ", 
+  RowBox[{"Map", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"#", ",", 
+       RowBox[{"IsTriviallyStable", "[", 
+        RowBox[{"#", ",", "1000", ",", "100"}], "]"}]}], "}"}], "&"}], ",", 
+    "stableRules"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7784430528826027`*^9, 3.7784431336129303`*^9}, {
+  3.778443196774338*^9, 3.7784432358968277`*^9}},
+ CellLabel->"In[95]:=",ExpressionUUID->"c2231541-2458-42d1-a165-c667bcc49be7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"12", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"13", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"19", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"23", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"28", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"29", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"32", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"33", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"36", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"37", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"40", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"44", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"50", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"51", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"55", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"64", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"68", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"69", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"70", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"71", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"72", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"76", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"77", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"78", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"79", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"91", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"92", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"93", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"95", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"96", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"100", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"104", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"108", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"123", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"127", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"128", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"132", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"136", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"140", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"141", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"156", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"157", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"160", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"164", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"168", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"172", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"178", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"179", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"192", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"196", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"197", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"198", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"199", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"200", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"201", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"202", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"203", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"204", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"205", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"206", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"207", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"216", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"217", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"218", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"219", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"220", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"221", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"222", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"223", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"224", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"228", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"232", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"233", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"234", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"235", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"236", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"237", ",", "False"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"238", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"239", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"248", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"249", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"250", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"251", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"252", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"253", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"254", ",", "True"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"255", ",", "True"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.778443134828211*^9, 3.778443162749017*^9}, {
+  3.7784432214258842`*^9, 3.7784432414128323`*^9}},
+ CellLabel->"Out[95]=",ExpressionUUID->"2be2b12d-f6f8-44e4-b8e1-a8ba3cd1bd35"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"notTrivialStableRules", " ", "=", " ", 
+  RowBox[{"Cases", "[", 
+   RowBox[{"trivialStabilityResults", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x_", ",", "False"}], "}"}], "\[RuleDelayed]", "x"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.77844326506112*^9, 3.778443283851343*^9}, {
+  3.7784477254360313`*^9, 3.778447731034027*^9}, {3.778447844029909*^9, 
+  3.778447847398546*^9}, {3.778448037784421*^9, 3.778448041907916*^9}},
+ CellLabel->
+  "In[493]:=",ExpressionUUID->"63cad57b-3cdc-4c4f-bbe2-caee11a56219"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "4", ",", "5", ",", "12", ",", "13", ",", "19", ",", "23", ",", 
+   "28", ",", "29", ",", "33", ",", "36", ",", "37", ",", "44", ",", "50", 
+   ",", "51", ",", "55", ",", "68", ",", "69", ",", "70", ",", "71", ",", 
+   "72", ",", "76", ",", "77", ",", "78", ",", "79", ",", "91", ",", "92", 
+   ",", "93", ",", "95", ",", "100", ",", "104", ",", "108", ",", "123", ",", 
+   "127", ",", "132", ",", "140", ",", "141", ",", "156", ",", "157", ",", 
+   "164", ",", "172", ",", "178", ",", "179", ",", "196", ",", "197", ",", 
+   "198", ",", "199", ",", "200", ",", "201", ",", "202", ",", "203", ",", 
+   "204", ",", "205", ",", "206", ",", "207", ",", "216", ",", "217", ",", 
+   "218", ",", "219", ",", "220", ",", "221", ",", "222", ",", "223", ",", 
+   "228", ",", "232", ",", "233", ",", "236", ",", "237"}], "}"}]], "Output",
+ CellChangeTimes->{3.778443251981883*^9, 3.778443284410532*^9, 
+  3.7784478481324577`*^9, 3.778448042695367*^9},
+ CellLabel->
+  "Out[493]=",ExpressionUUID->"ba07199b-b2c3-4427-9f2d-4fd99e8ed280"]
+}, Open  ]],
+
+Cell["Parece que estas son reglas interesantes", "Text",
+ CellChangeTimes->{{3.778448987203577*^9, 
+  3.778448992403493*^9}},ExpressionUUID->"75aaf6d3-46d6-4424-affa-\
+60988197e6a7"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ArrayPlot", "[", 
+     RowBox[{
+      RowBox[{"CellularAutomaton", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"1", ",", "100"}], "]"}], ",", "100"}], "]"}], ",", 
+      RowBox[{"PlotLabel", "\[Rule]", 
+       RowBox[{"\"\<Rule\>\"", "<>", 
+        RowBox[{"ToString", "[", "#", "]"}]}]}]}], "]"}], "&"}], ",", 
+   "notTrivialStableRules"}], "]"}]], "Input",
+ CellChangeTimes->{{3.778448033765872*^9, 3.778448089250236*^9}},
+ CellLabel->
+  "In[495]:=",ExpressionUUID->"9cdfc406-f555-479a-9578-1d573be94ad6"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8kJw0AMBVApnaQll2Dis/u/eZcdvKSAvIEB6Usw895t37SviOjG+4kf
+JzMv62q3cB9+55U9nLipq43TMM7LHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc
+HBwcHBwcHBwcHBwcHP/uWJ6ciljbXKv9O1lfq2RaWsI8eA6OeWGeDnyLGOI=
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule1\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2ssJgDAQBcAXO7ElSxA92//NYFCDoDdvE9gQ9jcNZJy3aR6SrDWWGuXt
+vFeetfSPPPL52sRgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDMYf
+RlLSIkexfZc77iudNnX2tc4r3Y3dxg4fIyaY
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule4\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8sNwjAMAFCbTViJESo4s/+NFCfpjw14lmqllj969+X9WG4R8WrfM76R
+LerRnmuqUtUOkSPG/9rb8yxUQ57G5nC/UUvyR1xu7fLY3c8epzg4ODg4ODg4
+ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODj+2JGbI6+O3daTI8eqGBO9
+YXPM4Q8RLRiD
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule5\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sERgyAQBdBvOrGllODEc/q/hcCCGQvI6TGDfJbFZwHux/t5PJKcbb7a
+3NrI1pd6jpCZUsdXbcZVyW1dZ2vLYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAY
+DAaDwWAwGAzGX4z+Y1zG+IbKv0bV6gVXV90fzZnfltHV9x/R+SEW
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule12\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8ENwyAMAEC7m3SljhC17+7/K4qwQgi/5nmKiMEGDj+372t7RMSnjXcb
+kRm5//ZY35A859aTy6HVHQwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgM
+BoPB+N/IRf1mI6p+sW8zsvrIqY+5ydp1zg/0saxy3x7Vxx7juKiXs2N9ElPz
+A90f3OIPG7kZUQ==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule13\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0EOAjEIAMDiT/yST9i4Z/9/c+0uSO9eTKZJm0AhMPft9dhuY4z9uM/j
+RnxujHzbOeOI+si6+qvCFmbXUtMGxHJacyZG1E5LYQuza6nh4ODg4ODg4ODg
+4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg+GNH/N6RS383ugbNiijHNX1m
+zlytHOWYuTd/5RYl
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule19\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0DEOwyAMAEDTn/RLfULUzP3/VhogCII6tdtZYrBjbC737fXYbhGx5/PM
+J+WII1KJGGOopFVPSWtx+jhPn+b0cUNy7WmTru1tOwcHBwcHBwcHBwcHBwcH
+BwcHBwcHBwcHBwcHBwcHBwcHBwcHB8cvHf0xf3PkHStHLK1fHHHm5epnbH3G
+saNiWqWV+y84y2tHahci3pKOFiE=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule23\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2jEOwyAMheHn3qRX6hGidu79tyYBY8xAFUVsv6IIagh+H3Of2/e1PSR9
+9ve9v7LjsTKon5tkk2e6mA4d9+dvLxzxPwQOHDhw4MCBAwcOHDhw4MCBAwcO
+HDhw4MCBAwcOHDhw4MCBAwcOHDiuO85TVjtslcO/PVosc1gb7zjy1qFQepQW
+dxw2LnaFOreZQ7V9/M4x+6hK2SO9txgSpntUutccs4+qyBwKa6O1hLGxJTnL
+cYVKAv//XF3xgs9K2WfWcv0A/tEWTA==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule28\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8sNwjAQBcC3dEJLlBDBmf5vQdgmm0h0MIksJ/b+5r69H9styeuznhlP
+re33Hp/juN+lnVXLWP91hM/4qnlRvXBvd2k6gmfZU0bNcVvxPhUHBwcHBwcH
+BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHR3rfZK3/jtXsm3d2pE+W
+HYOyFic=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule29\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0UESwiAMheEXb+KVPEJH195/p6UJL2jHheufKQwlEPIN1+152y6SHu9+
+12gR8T2GI9Ui5v8+aUFHws25I7d/jLm5n5m3V0BnkbWiWQoOHDhw4MCBAwcO
+HDhw4MCBAwcOHDhw4MCBAwcOHDhw4MCBAwcOHDhw4PjfsX/qK+OaWpOzqB2p
+Ul3Xb4eOhIvDa87fuC61sveaTt7jSLi+R65VRLlt1JddM9xnVULmewF6ohp6
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule33\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sENwjAMBdBfNmElRqjgzP43imxqhJDKGb1IUZzE8csAPq/3y3pKctvm
+dZvLwfhMyL4cPv0ticFgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAY
+f288u9W6ZS0V9/0U+7Yf473freLkVbCSUkEfVVw5nb30gzmvj+w3mb92nClY
++wd1cydD
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule36\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt00sOwjAMBFCbm3AljlDBmvvvaMlv7EwqdYHEYipVJG0Sz0vKfXs/tpuZ
+vfb7acflx1V+WKc0Rxveh2G9Gxb5tvLg3IE5Bt2UJq1rOJ1Hl0MOOeSQQw45
+5JBDDjnkkEMOOeSQQw455JBDDjnkkEMOOeSQQw455Pgjh+1V7dcOzwFXjpDm
+omMKuHL4ct0zR4tmMcjKsV73zOEsIHNMaS44SEDuSGnW9YiDBOSOlGZdjzjm
+gH2OhW7IVJ7SesTRh4bsgVG7IVNp0XrE4SFmnDMOBDcEntJ6afNhaDyDWthC
+Atiudoy8Hu5enzQ5YCT5f4w1MAU6YPfqiRLH2Jg2CE8SjnGkyGo8JdhB97Gf
+fSIeu/dvHaMkX8GEOmVieWTQa2v1QfUl5PI2uH+ix/0BRO8aow==
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule37\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2kEKwkAMRuEXb+KVPELRtfffWU0ypAXBrfCmTJlk/vDRfa/b87ZdgMe+
+7/sOohbjfShXq47MwDnRNeeMhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaG
+hoaGhoaGhoaGxp8ZEF8MRuA3I1ePVvG+pqKr1cfK50SOjkgZwPiOz5OjsYrI
+X+VGiw7nRDQGHCOxWmW8AD7SI60=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule44\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzzEOwzAIhWHITXqlHiFK5t5/i0sNGDJV6tZfjqXE+EG+x/567puInGMf
+Y4uKfh57zWXfcbqW4sTPe6kvzU61UrpIj5Q/6KW+cODAgQMHDhw4cODAgQMH
+Dhw4cODAgQMHDhw4cODAgQMHDhw4cODAgeN/Haot8nuHliHfO7Q6NK9nIx8S
+LS00ozdHMVtdFsc7tDqi1xwSLS00o5LTZ92be+ICAIAWPw==
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule50\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0EWwiAMBcDEm3glj9Cna++/k/ZTqQdwN0DhEZLC3Lf3Y7tV1Wt8z9pb
+9xhjqrHu04plOQ7OTY4vBekJpvonqROZ/+0jO/ed2Rl92azCWZCe4PcVK2le
+ycHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHxX8cHpY0W
+KQ==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule51\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0TEOgzAMBVCHm/RKHAHRufffCgWHkHZATB2epViJiL7zxGN6jdMQEc9l
+zbFXyYqj2vO62VZzLbfb8dN/ZPRRzbBTTjmmfM3P0TWwy+ijODg4ODg4ODg4
+ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OP7NEb0jzjlxy5GAvdeovFTf
+UCK/N2HXHPkj1v4GZ3YWIw==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule55\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2ssNgCAMANDiJq7kCETP7n/T8FUH8PQCtBBK3wKs+dzyEhHHvfZ7pRRl
+1DxnajczljTj9+WsGyEePRkMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAY
+DAaDwfjFiJLruR4fb9vHuVQ3rbh3iXdd9JrR+QIESB02
+     "], {{0, 0}, {100, 101}}, {
+     0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule68\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2kEOwjAMRNEZbsKVOEJF19x/R+U6jgOIFey+mljyJPLLAXrdHrftImk/
+9v3Ysuwq41uaFn3IM56HX1IMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM
+DAwMDAwMDAyM3xluVX8wIpCq2q+X2iv6NK2G3o3ZKOZ61PivbbnU/BhVh3lj
+vPVskz/TahxzlTUDT1/l56hic0wuPQF7PhiJ
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule69\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EsKwzAMRVGpO+mWuoTQjLv/WUPRx5YcCiWTwsU4yPjZ1sl9ez22m4js
+x3weUz8jP8sxFSXZA3PW03W7jaFoyRqYs5nGgQMHDhw4cODAgQMHDhw4cODA
+gQMHDhw4cODAgQMHDhw4cODAgQPHHzrWmmsdJ5prHUtJd2TqF4dGpLQ0OXTc
+++rIH+xveJVvxTId2vs7d6hWR1T5VizTET3YJWO3xSHSHXbMbpHhUrtT/Jz1
+4p+lQ/UNAUkWSQ==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule70\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8ERgyAQBdD96SQtpQQnntP/LTqAEpN08GRUWJZl3315PZZbVa3b+6z9
+yTb6N8m8nP7VdtJS8pE4FpkirdpULPmRchQak95G1Xn9UaXy1eQ4soc4ODg4
+ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OFrsknJ19M7+OEbf
+Z91+ZJu8AZ6pFik=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule71\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sENAiEQBdCPndiSJWz0bP+3xQUMy3qwgEcyJPwBHgVw396P7ZbkVetZ
+qyyjJp+wNfri3F6jJRiL71kGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgM
+BoPBYDDq3Ot/I+XHtS08uiUXI8fHuLnVd/Z9mZ/Q0vHa2cgwkpOxA281IFE=
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule72\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzTEOgCAMBdDiTbySRyA6e/9NBDE4mLi4PaBNA5+8Oe9LniJiK7WWSudu
+bRiiVe9j5Aq2uZ1+X7+la8WQZTAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaD
+wWAwGAwG43cjHka8GnGnvxn1seYPVMccdA==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule76\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2s0NwjAMBlCbTViJESp6Zv8bUX7cAhe4oqcqVe18zssAvW6P23aJiL2t
+e1uR7Zmv9ZlH81TN8qNfrXzdeSsYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaD
+wWAwGAwGg/G3RuZPRo9XM74yIs7BrB/gKlYH91NGfOz3/jGRa27cfARXqq62
+6jk8Yk+7KhYu
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule77\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0EKwjAQBdCMN/FKHqHYtfff2ZoMGWkRQdw92iFlkvw3vS6P23Jpra1b
+3beK/T175vJp+/h5PMVgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAY
+jL8Z0c6O/GyMdl/iPaWk9aozfGn0W+MHtoqoKdXOirKbsXPQGP0Mmbd6eHt1
+YiaPrdyOnCFTR1yZcG8+AQitFDc=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule78\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0MENgCAMheHiJq7kCETP7n8Tgi0gEGOinv4ggvjSzzr7ffGTiGxhrmGK
+i5eOYls95qVax6NIXuMYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgY
+GBgYGBg/G53k24Z834d73MdYGhiifWT0xmi+qTGsjHVxHqlTkF2j/rdS7SyR
+blbQjpJTkFpBWxN9n6tbGaexdBZjByvuE88=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule79\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt000SwjAIBWDwJl7JIzi69v472yYpPCBxpjtnnjP+hFTKR+j9+Xk8byLy
+3t4vOV6q2r7Gsgjuax8Iu22/2tuDIV4m0sXt1SUv9so4HXTQQQcddNBBBx10
+0EEHHXTQQQcddNBBBx100EEHHXTQQQcddNBBx/85trrS7iUHJAoOScqLDkgU
+bp+VpaPXuXDIwhGVs3qhBHS0FCtHVE4csnAIHnvhkF8OV+fEEY69cOBu4RCr
+uhghhatmDr9bOqCVaYRQM3PI3GF1Dof6BBZz0xfHAdpVOcQKaStMcC7dp3NI
+blfhSN0PCRQbFR04O8dvdFid59/SPAk0CupMz02PnD2zFuDgq5uc7vKNgn6H
+5+aMYMviA6yjmnEg1gRNTWhXuSej51NfsJ13v06/EPIRSw==
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule91\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EESQDAMheHETVzJEQxr99+pRmlGMsbaP1Wbl+QL47xN8yAia7lLudqd
+/lEfxedR+j4IAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwPj
+54ZIbpT3RyO2jjGpoamR8DbNWzYmNmqWGlHUpt1WKw0NPbP+n7gla581uO92
+m1+btm5t9RZbdvF1wg6ExRN3
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule92\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0EOwyAMRFFPb5Ir9QhRs+79dyHUUBsqFKnbrxABBs0z2/5+7g8zO8r/
+Kr/q51NYKJfimItKq1UOBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGxk3jR/R08vc7lHNqaTjxUhpTcfkOizlXsNl48lmmxH5PoS3fB7F1
+25/QguUdSulWj4v36tzb8v33nWrdnmt/E2k=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule93\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz9ENAiEMANDiJq7kCBf9dv8/L6WVYHQCXwlJodDmXY/n7bhExOPc93OP
+jsjV6czrpkrRq+rr71hv+5RRt/GO/N1p5WMrfc7YYz/3oMHBwcHBwcHBwcHB
+wcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHx944ck+eeuRyz2Sp9cVSv2fCX
+4wUHpRPZ
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule95\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sERgCAMRNGNndiSJTh6tv+bYBKItuA/ADPrhjfeWfdr2xdJZ1tHWyaz
+vvpR9xHlYe9ObanEqhP5AQMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD
+AwMDAwMDA+MnRn+YVhryrZ8avXFLRJI0J5S7Mv8Y8+mb5e1P9HQ0SZ+OKAuK
+ctzicTajYT5Vf8kB3RNWIig=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule100\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EsOgCAMRdGHO3FLLsHo2P3P/JUCSkwMOrvEL9p30vbjMoydpHk7p+0M
+Tausb03DwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMC45P1v
+qIZ8beQJ8s0n4y2pmKCQ9ZRSdTeyzmsjuD/vbXi897TfFdJ2UZw6r8y52JIt
+Kzmu5h3NWbCioXyQ8jznZUf6eM7IBLfiH+erT1KX4tjICtZ+J+Q=
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule104\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0EOgCAMRNHBm3glj2B07f13EgYKRhK3Lj6moQi0vHW/tn2RdOY4ciSl
+POTQI5Nzz23Pc/lXlv2+V/WwC2vcnvZwPjwj5qjw7tHW7RUfPXDgwIEDBw4c
+OHDgwIEDBw4cOHDgwIEDBw4cOHDgwIEDBw4cOHDgwIEDx98c8v32/oejb/pA
+vx9j5lA/E5VLNnMo1eKOsUeq3+CIkjfdcx0c
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule108\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EEOwjAMRFEPN+FKHKGia+6/gyaxMyRiwf5HVHKVsc3r/Xg9jltEnJ/n
+Ge1Iijrqp6os7PIq2ou12IBYh8VXt2W1FnaZW2y7D9A2DAcOHDhw4MCBAwcO
+HDhw4MCBAwcOHDhw4MCBAwcOHDhw4MCBAwcOHDhw/HbMtz8dV69mosrFMWK7
+o+et29oqquq2QbtD/l80f5M+dqlWt+vxLbPsiSxl+oqlqi+qfLwBD1USOQ==
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule123\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz8ENgzAMBVC7m3QlRkDl3P1vjYiBCLJBn1GU8OME3nv9LusrIrY2Pm1E
+tqqp1yyrYBrdw3vF0RVD5SSrqybRM3w0cXBwcHBwcHBwcHBwcHBwcHBwcHBw
+cHBwcHBwcHBwcHBwcHBwcPy7o9+WGcdzOTpz36xP5vnX1RrD2TyXw1ubfnjM
+E9E=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule127\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sENwyAQBMAlnaSllGAl7/T/CzKciWXJFQzmJDhWHgrguX1f2yPJp9e7
+V2t9ttQ8r2pcltm//7NU+zLSGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8Fg
+MBgMBoPBuDXqOduNcUTORrICGbV2rd7JjaPRmb/aW9PIuMqMLGNmjuwPwbYi
+oA==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule132\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EEOhCAMQNHP3MQreQQzrr3/TmNFAYmJG1c/oQ1tAy8wTMs4/YB5i/8W
+pJRIkffIK6eqGdHuijrK61Rxu4aGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaG
+hoaGhoaGhoaGhsaHBj2D9wZPRuddnEjfoGdUTRqjqc9ma3AZVAZhxC5GUPwQ
+3OrcPH4tz1Yqix/e
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule140\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2jEOgCAMheGHN/FKHoHo7P03QSxUgpsOJn+wGkjpR5md477ESdKWYk2h
+kEd52reuPo9B6jir34CBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGB
+gYGBgfFTI4xKvGvoayO91ToZGl2jFv4WHo9jPah20le7jFpatsPVcvN2hrtx
+hhV3m+UNu9Cra/tlTvd5O0Ow7ktOqSET89IB0+YYHw==
+     "], {{0, 0}, {100, 101}}, {
+     0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule141\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0jEOwyAMheHn3qRX6hGidu79t1DJNgYaVR3YfiVIxMaGL8n9eD+Om6RX
+G882ZJ/LFJf61DLi8ZLSUjWU9WQm1sY1GnddNT+XwmHL0hEHDhw4cODAgQMH
+Dhw4cODAgQMHDhw4cODAgQMHDhw4cODAgQMHDhwXDs19dziWvjscGtfscUxr
+9jhcstehPx1ffsjfjqiaHPGpPNEmkbUo8WiBl6ONDvW+vSyAeTSz2MpzyqgV
+R7z72ZF9vSIP4Ee2E7aLFhU=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule156\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0FEOwiAMANDiTbySR1jct/f/cxE6YImZifHHvGyDUKDt23V53JZLRKzb
+d9++KOOTwzD3eNR3jpWTyJw/M8xzj/eSUyxOIscaHBwcHBwcHBwcHBwcHBwc
+HBwcHBwcHBwcHBwcHBwcHBwcHBwc/+Pom79z5PoLx3D7jeN14tD/Z47eZp7O
+2J6iLatkaDqLlrnDPU8bhl/QbresuV1q9ScxoBYk
+     "], {{0, 0}, {100, 101}}, {0, 
+     1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule157\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2j0OgCAMhuFPb+KVPALR2ftvNvwUiOiik3lJutDSp91ZwrGGWdJusVlM
+N2eUUBPP754qMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+/mRc/2F9buj62UsD+oVhnVRuvWsyeqU17n6gjY24RF6kLpT6qK2OueqoS7U1
+LnlF3CI3l7/VlC/lU0dQnuv40k8+XBnY4gRLVyc2
+     "], {{0, 0}, {100, 101}}, {0, 
+     1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule164\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt1EuuwjAQRNHK2wlbYgnoMWb/M1Dwp9uuREIyE3SDIkin7aN0RVxuj+vt
+T9L9df6/Tm316L/ioXZHQ7V+aWw8WI+BgYGBgYGBgYGBgYGBgYGBgYGBgYGB
+gYGBgYGBgYHxY4ZFVhsOWW6c9qwy5qbVmTtkeeYGWZ/5jHwh8wn5zDjL833l
+kA+Nkzzfz+GQYChXvXGc57a1PIbGaEz/O85weapfOSTOKvYeGybPVpNF0qx6
+75kx59lqskieleLm1VDazOXZarJIMhQ37IZ644TkEcoi2ahIpEqr6jgzkkco
+i/T3QgEJN+skanlAyuPtn65lZF+u4X59xwq0ry+NZb+U5xNj8iRz
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule172\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzzESgzAMRNFdbsKVcgSG1Ll/FwiyLZEqhav8wUbYaO156/Z6bIuk5zH3
+Y9qKx6pVfbhsjL7yfMVTLp1Qq/tQ2Rh99aB7POVw4MCBAwcOHDhw4MCBAwcO
+HDhw4MCBAwcOHDhw4MCBAwcOHDhw4MCB428dThuTHL7aZjocl/zoUL6kJWMV
+9fMj3o7P5jgXSvGI2aPq6jjnG74LFi8=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule178\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0sOwyAMRdHn7iRbyhKiZpz9z/IhGPOpVGWaCwIhjG3OtGzz8pG0Hut7
+LGtm2QbzitQX4RArjA8x60cLXZHuR/kw6jsshwMHDhw4cODAgQMHDhw4cODA
+gQMHDhw4cODAgQMHDhw4cODAgQMHDhwvcNTxJw715ZpUb6LaoX8doUQu57XK
+gxjNDqn9jGd5gnUt7BxK2xlPr9KtPJodfl0+eGfdFczKQ9sBpx4WHA==
+     "], {{0, 0}, {
+     100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule179\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2kkOgzAMQNFPb8KVOAJq173/rmGyI1CKqNQN+hLOpDjPyZp+fA/jA3iV
+eJag68o3x9IR81iPJoNI2W3LSR6roaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGh
+oaGhoaGhoaGhoaFxe4P/G/xicMmgYfDN4Nyo/lWjYXAwSIOGQXXMNF6zFmPN
+Jx6Bg0EaW1153awrS/wA1IUgoQ==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule196\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2sENgCAMheGHm7iSIxA9u/9NQi2UhBgSr3+QhmgfXwdwz/eRN0lX2WfZ
+KS4v7dH45nsNbeE2DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM
+DAwMjD9G+LBkpCG1aMgSFlww1KtrIRgy9tIO6i1TQx5Jrd+rz6iZ0W+u/8XV
+bec4xztLm8j7W301Dzrcb9MDZuQY5g==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule197\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2jEOwjAMheFnbsKVOEIFM/ffKI1DYhtoBeuvKFJS27G/veflfllOkm7r
+vq5bJjO1JVM6poCprvzhXc7Iq4mlrNbuN415OHDgwIEDBw4cOHDgwIEDBw4c
+OHDgwIEDBw4cOHDgwIEDBw4cOHDgwPGP43k/5jDlcQ87FGLfHPrN0QrH9bNj
+y9x3tGOZbXbUnFHv48wj9V/YpoDSFKPQHzOX2Nw29NjSXwP3F6eAQs9e15/0
+Ht4r0kwPtbwWHA==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule198\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt2kEOgzAMRNEZbsKVegRE173/rhRhPECFuujyC0Jkx07y9ozT6zENkp7L
+mJdh6/PsH1emJtVbqVyMskuc4amvDqypS/MqUZNnHOIOceDAgQMHDhw4cODA
+gQMHDhw4cODAgQMHDhw4cODAgQMHDhw4cODAgQPH/x1R983h/g/N5+7fHbp3
+KKvvHMfmBrj32B1W32ddrn5Huvq3Law3S1EWKg==
+     "], {{0, 0}, {100, 101}}, {0, 
+     1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule199\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzbkNgDAMAECHTViJERDU7N8B+XhES3eRkjiO7RvnbZqHiFiPvUReqa8j
+fiZK5voqQT3yfS9Or3GfSQaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwG
+g8FgMP4ycluKbsQzc76qUZ+tpo1sM27dpT3X7sQIHTI=
+     "], {{0, 0}, {100, 101}}, {
+     0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule200\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EsOgCAMRdE+d+KWXALRsfufKdAGMBinDi7xQ/qhHtd0bmkxs+O+d8tL
+41VfsZFvusr2KFkNKesa6kHSyww9h81n2OcMtc/FgQMHDhw4cODAgQMHDhw4
+cODAgQMHDhw4cODAgQMHDhw4cODAgQMHDhx/dESdoksTR6ypY0j5DHUHucVL
+a5d6oLeUcDtxcNSUR8Oh+JE5fgEg3w6n
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule201\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0zEOwyAMhWG7N+mVeoSonXv/rVUSGxuTibD9lSqFB/GHcHhu39f2EJHP
+//+W46fSHvz5zOM4D64WxTptEgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD
+AwMDAwNjjTFA7jcqssAoyApjUO9+oyu4L6rZpJELHkbJZo3yPQ+yaaMuKtnE
+HazI2Y8+m7mDBbF+dNnUHewROyvJWTG0n7s2CuJnJVrrREOvjRQMkHZWgzrJ
+8Ki2MwYDxL/dgGRDbYm6UdqpnZGRVqAhvtdWwV/QXDP5wUiI34+A+F5tsC85
+Ms3XSX3OUbU9+8as57HxZx2b/AHsRAg4
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule202\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EsOgCAMRdE+d+KWXALRsfufqWihBCcmjMw1GH5NT8uc9iVNZrad/2r3
+Jx++q5u4fgmQdVNdK55gYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBg
+YGBgYGD82HiJHGucgtRFDu6jIL2hJuF3Q95HQfwo9KHGVYVd76trjPpQeTyS
+5NVbwD3jA18XXkVIFo0cdAD33wld
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule203\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzdsNgDAIAEBwE1dyhEa/3f/PPtAhzDWFFgK5vd1H2yLi6nH2yMhx64nx
+Xfntz5GR5slVrta3VY1arvFZZDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaD
+wWAwGAwGg/ET4wH6XRaR
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule204\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzTEOgCAMAMDWn/gln0B09v+biIJxcnU4oIS0pTeXfSlTRGw11hqROe68
+T8vchbjyPT2ez45XNdu/zDEsksFgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgM
+BoPBYDAYjN8ZbfX5+W2cPQdksg9+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule205\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EsKg0AQBNAub5Ir5Qii69x/FyNMNJOALiSrB1PQ1HwezG183MehquYl
+05LKuj7Syq85tevXuTvV7baCwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwG
+g8FgMBhnjPzDyJGRC4wcGbnAyG8jLUlnbC8lZ433l7xuPwGO+gwF
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule206\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzjEOgCAMAEDwJ37JJxid/f8mCCUMrG4HlABtc+znc5xbSukucZXIPcrW
+Ztxi9II8blPHnFy0xYnBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAw
+GIzfjVpSRhh19adW9uVyexh/GOdIplVbGC8iagtC
+     "], {{0, 0}, {100, 101}}, {0, 
+     1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule207\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0UsOwjAMRdE8dsKWWEIFY/Y/ozStPwllhCUGt1I/qR0fR74uz9tyaa09
+1vvexkv2VPyR10oRy/i2DQMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD
+AwPjjw3VG6o3VqHaeBPFxkbUGp0oNXai0jiIQsOIOsNPUWYE4teGZG8jTo0j
+Mhn6ZHhpWztxZuwRTYbc8FgsPRPKyaEv9b2DYSOMfqizfyRCQ7MtJmsyfITB
+9zpWKp1C3nPLlbTl5pnHEfo2T+uY9AIAcwhT
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule216\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzkESgjAMBdDGm3Alj8DI2vvvsKbUgCuXzjxmKGl+08eyPu/rrbW2vd5H
+60/MZX6uRbTrmZm/q1MrarNmDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAw
+GAwGg8H4FyPi25i9n4yc6st5vreOohypQyXPrLaqE6OMrMZABmOf6Tgybio/
+FrmND3ZcNZ1e7jr0CQU=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule217\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0DEOgzAMhWG/3qRX4gionXv/rS2xjS2UMlVi+CMFTGLnM7mvr2W9mdnz
+Mx/Wh9prNg7bOi5qlouBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGB
+gYGBgXFtQ6oLfzEk1YN+G3s/3dCMUhBK7cSo/USRP6tew9G3IuMbdENZm11n
+31nkafXKy81oQNuMMA911TuR/JctIt/KrxF1MI7cSxXZ3qdlbfziG1nsBbY=
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule218\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzjkOgzAQBVD/3CRX4ggoqXP/LgjGYAFF+jxLXmd5fs6faX601t7LfLW7
+kcthDJ0fr0m/DAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8Fg/JWR
+1Ja+jOVJhi73Rk5v/X7UZj1n3Wvp7Bat+5aU4TOtflQddi3Vfa/9ArGlBLE=
+
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule219\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzkEKgDAMRNGMN/FKHqHo2vvvLKlJpQpuxNUHIzWT9DmXfSmTmW211lom
+i7fiaT0/K1rt1IfOzx5E+7JwH8DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMD41VAEnxkaDSmCN8MHMteD0a7SaEgZvBg+6OUd9T/OLb8q
+b1JfzCDm78YB82QNQw==
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule220\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzcENgzAMBdDvbsJKHQGVM/vfCk1CYIDeXqQk8rfst6z7e30l2Y77OW4q
+aV/NqjKqq55hcmWP/pycrcdWBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAY
+DAaDwWAw/mrUeVp2N3rYmudz39WyVB/uS35pRmsYX9ppCz4=
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule221\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzkEWgjAMBcB8b+KVPAJP195/p4UWiyw8gJMHpE1JptfleVsuVfV4v/dq
+keqR8Xxqh01fpk5tU85hzlRlMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPB
+YDAYDMb/Gsn0Uz/ba1/GWk+d2n4YaVFrb8vbN9uwbV99OerjZtM9kj1nmjOM
+F/3KCVU=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule222\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzbERgCAMAEDiJq7kCJ7W7t8JKJ6ird0T4BII/Dhv0zyklNa8lnQbUaMr
+o6WPxmd9nvWfvHoYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8H4
+z8hnZVzXNf8wWlecRqlqa3t8zCMirjdl3wFSKgjo
+     "], {{0, 0}, {100, 101}}, {0, 
+     1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule223\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0k0SgjAMhuGv3sQreQRG1t5/J0jJTxU3mJUvM2UamuRpp1ynx226SJqX
+cV9Ga20d2xMjhfcY5jWvj9P8DQMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD
+AwMDAwPjvwzVG6o3FqHaWIli40XUGhtRavRTVBo78WNDkduJbOikISVOH+5D
+Jw0FIxDR0DdDx4a8PqYbEQxloy+F+gPDlux+B8INZaPPrX5o21KdE3on/N/1
+UN7UEjS2Ncl2Fu83E+q5MfSmnjC29ZO2vhsFLhNqT2ZjJFI=
+     "], {{0, 0}, {100, 
+     101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule228\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0E0KgCAQhuH5uklX6ghR6+6/S3RK0xYVCC3eQWGYHx9wnLdpHsxsDXex
+KhTiTDxtJ7wX+8VQu3H7BAYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGxu8MWXdDGellqEA+GLqO3RoqkfeGEtIaus5k5LnhN63GbS8pnqNc
+EVYbeSd/i9wIxR0wHg5Y
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule232\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJzt0EESgjAMheE8b+KVPAIja++/E2nTVygyOrr8OwPT0CRfw3V63KZLRMzL
+c4/vl/R7BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGxufA
+n42jTC3r+ODEeE+OvcoQai3k9yZ5Z7Sz0XKvllOGeH1XxjVLOjEyZ0TU+Zmz
+EllU4vVQsTe6q2eYVR6o/hQfhpLIxnWqtu0rXeqLZJV/tpybRhiRY2/7yk3/
+JyijBKc=
+     "], {{0, 0}, {100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule233\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztzckNgCAQAMBdO7ElSzD6tv+fB4gk+vU3EK49mHHepnmIiPVYS5SRGdFf
+89gzu2iXzng3dc/amXeoVTEYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAw
+GAwGg/Gnkedsl6vmMUr8Pmomarwapa/98WXsNgMN9A==
+     "], {{0, 0}, {100, 101}}, {
+     0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule236\"", TraditionalForm]], ",", 
+   GraphicsBox[RasterBox[CompressedData["
+1:eJztz0sKwzAMBUCpN8mVcoTQrnP/XROjNIJA6KK7jsDGn2cNnpZ1Xh4R8drG
+M76tzPv9L4rBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGH9g5Gfq
+B2Peeua5zauR59OKtvTReV+NalrWyeg5rirVjGxvjz9mhaLSb9cJBEU=
+     "], {{0, 0}, {
+     100, 101}}, {0, 1}],
+    Frame->Automatic,
+    FrameLabel->{None, None},
+    FrameTicks->{{None, None}, {None, None}},
+    GridLinesStyle->Directive[
+      GrayLevel[0.5, 0.4]],
+    Method->{
+     "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultGraphicsInteraction" -> {
+       "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+        "Effects" -> {
+         "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+          "Droplines" -> {
+           "freeformCursorMode" -> True, 
+            "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+      "DefaultPlotStyle" -> Automatic},
+    PlotLabel->FormBox["\"Rule237\"", TraditionalForm]]}], "}"}]], "Output",
+ CellChangeTimes->{3.7784480518474283`*^9, 3.7784480900212307`*^9},
+ CellLabel->
+  "Out[495]=",ExpressionUUID->"70a43185-ef7a-48f3-9f67-c8494d6c3a91"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Perturbaci\[OAcute]n-Relajaci\[OAcute]n del Aut\[OAcute]mata celular", \
+"Subtitle",
+ CellChangeTimes->{{3.77844343580684*^9, 
+  3.778443445807086*^9}},ExpressionUUID->"df9086bc-c7bd-426a-858e-\
+c352a198321d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"interestingRules", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"37", ",", "91", ",", "172"}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{3.778443420827684*^9, 
+  3.778448212248217*^9},ExpressionUUID->"bdb157cf-b2fe-43f7-8915-\
+fbcc7d282a81"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"Flip", "[", "1", "]"}], "=", "0"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Flip", "[", "0", "]"}], "=", "1"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Disturb", "[", "ca_", "]"}], ":=", 
+   RowBox[{"MapAt", "[", 
+    RowBox[{"Flip", ",", "ca", ",", 
+     RowBox[{"RandomInteger", "[", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"Length", "[", "ca", "]"}]}], "}"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Relax", "[", 
+    RowBox[{"rule_", ",", "configuration_", ",", 
+     RowBox[{"maxIterations_", " ", ":", "1000"}]}], "]"}], ":=", 
+   RowBox[{"NestWhileList", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"CellularAutomaton", "[", 
+       RowBox[{"rule", ",", "#"}], "]"}], "&"}], ",", "configuration", ",", 
+     RowBox[{
+      RowBox[{"!", 
+       RowBox[{"StillOrPeriodicQ", "[", "##", "]"}]}], "&"}], ",", "3", ",", 
+     "maxIterations"}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.778445965161104*^9, 3.7784459781420813`*^9}, {
+  3.778446127725314*^9, 3.778446206425723*^9}, {3.77844626079639*^9, 
+  3.778446391954541*^9}, {3.778447087068075*^9, 3.778447091980974*^9}, {
+  3.778447200913732*^9, 3.7784472920644627`*^9}, {3.7784475756609097`*^9, 
+  3.778447578038045*^9}, {3.778448341269718*^9, 3.778448344530217*^9}, {
+  3.778448405547285*^9, 3.778448441632988*^9}, {3.7784485025132217`*^9, 
+  3.778448502738942*^9}},
+ CellLabel->
+  "In[527]:=",ExpressionUUID->"4bbdd079-789f-49fe-96a6-e36784097911"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ArrayPlot", "[", 
+  RowBox[{"CellularAutomaton", "[", 
+   RowBox[{"37", ",", "random", ",", "100"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.778448246660718*^9, 3.7784482626292553`*^9}},
+ CellLabel->
+  "In[503]:=",ExpressionUUID->"75c08b70-6198-4c1c-bb5e-221e247030ac"],
+
+Cell[BoxData[
+ GraphicsBox[RasterBox[CompressedData["
+1:eJztlFESwiAMRDfexCt5BEe/vf+fDAWSDah1xv4427FRIAn7ltbz9XG5ngDc
+y30rt5UrxjHoIxoDAOW1mTA/9YGlbXi3VRXvaHRNiuKSOMQhDnGIQxziEIc4
+xCEOcYhDHOIQhzjEIQ5xiEMc4hCHOMQhDnGIQxziEMd/cxTlseAYDssFR3DY
+sRzdKPDybzm6UV6/jyPJes+R7Kr75c4rDouqP3GQXduPXRz2DQfZxRUvOLIs
+VwDCQOgHjFi/6Y1ZcUyy2MAFh9WmtMQGTxxJVlRQo4e4Mqph/Ma0Z6Db4CqQ
+3I0GeohPBB+Wt8Tg9+OeZFEGOAQFmSN0RrAhlKU/H89Ar3EJaIrSUW2p6J+R
+gD4fZRlljBrv171pFU9tcxqu
+   "], {{0, 0}, {100, 101}}, {0, 1}],
+  Frame->Automatic,
+  FrameLabel->{None, None},
+  FrameTicks->{{None, None}, {None, None}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultPlotStyle" -> 
+    Automatic}]], "Output",
+ CellChangeTimes->{{3.778448247546336*^9, 3.7784482627873297`*^9}},
+ CellLabel->
+  "Out[503]=",ExpressionUUID->"062be307-3171-425e-bbd5-6d4a37462c29"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"stableConf", " ", "=", " ", 
+  RowBox[{"GetStableConfiguration", "[", 
+   RowBox[{"37", ",", "random", ",", "1000"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.778446398472006*^9, 3.778446401694583*^9}, 
+   3.778448237841608*^9},
+ CellLabel->
+  "In[504]:=",ExpressionUUID->"834cf1da-beda-4c48-910e-b1b60f8587ef"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", 
+   ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", 
+   "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", "0", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", 
+   "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", 
+   "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+   "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+   "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", 
+   ",", "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", 
+   "0", ",", "0", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "0", ",", "0"}], "}"}]], "Output",
+ CellChangeTimes->{{3.778446394085905*^9, 3.7784464066299*^9}, 
+   3.778446714424733*^9, 3.77844828682654*^9},
+ CellLabel->
+  "Out[504]=",ExpressionUUID->"63ac59f0-0684-437d-8dc7-acaeedc8465d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ArrayPlot", "[", 
+  RowBox[{"CellularAutomaton", "[", 
+   RowBox[{"37", ",", "stableConf", ",", "100"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{3.7784483015532084`*^9},
+ CellLabel->
+  "In[505]:=",ExpressionUUID->"ca1ec899-735d-4c10-b62f-f8b4f9677bcd"],
+
+Cell[BoxData[
+ GraphicsBox[RasterBox[CompressedData["
+1:eJztzzEKwCAMAMCkP+mX+gRp5/5/qwi2Cq7dLqCQYBJvL/dRtoi46jmjRdbo
+95D0bMgzM6d3b+WtL+YMzdOk+PbMXRHzxhhi8aNW5uDg4ODg4ODg4ODg4ODg
+4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OD42/EAyr8a7g==
+   "], {{0, 0}, {100, 101}}, {0, 
+   1}],
+  Frame->Automatic,
+  FrameLabel->{None, None},
+  FrameTicks->{{None, None}, {None, None}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultPlotStyle" -> 
+    Automatic}]], "Output",
+ CellChangeTimes->{3.7784483021044273`*^9},
+ CellLabel->"Out[505]=",ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJzt0s1qU1EYRuETigoWA5UOHXTqzKvQkRcRSkKCiFJ7/5q9g6kBhRedrFdW
+4By+vc/fQ1gfN4/77efN4+F+c/fhYfN1f7j/dvf+y8Nx62q1LKv98fh0t4z5
++7L8PM3fYZyOq6u52u1241jmdBp/vTRunYvtOK3+y+vPxvnl+EvWY3oxpldj
+uj5Pc+/mvHd7uTenN5dvmdO7Ma0v99aXT0j6e9Lr803r33zq6WU3f/rA7Zjm
+W56fp7eX9Ker6/NbriX9GwnYkqRSEjBvSQkJ2JKkUhIwb0kJCdiSpFISMG9J
+CQnYkqSEBGxJUikJmLekhARsSVIpCZi3pIQEbElSKQmYt6SEBGxJUkICtiSp
+lATMW1JCArYkqZQEzFtSQgK2JKmUBMxbUkICtiSplATMW1JCArYkKSEBW5JU
+SgLmLSkhAVuSVEoC5i0pIQFbklRKAuYtKSEBW5KUkIAtSSolAfOWlJCALUkq
+JQHzlpSQgC1JKiUB85aUkIAtSSolAfOWlJCALUlKSMCWJJWSgHlLSkjAliSV
+koB5S0pIwJYklZKAeUtKSMCWJCUkYEuSSknAvCUlJGBLkkpJwLwlJSRgS5JK
+ScC8JSUkYEuSSknAvCUlJGBLkhISsCVJpSRg3pISErAlSaUkYN6SEhKwJUml
+JGDekhISsCVJCQnYkqRSEjBvSQkJ2JKkUhIwb0kJCdiSpFISMG9JCQnYkqRS
+EjBvSQkJ2JKkhARsSVIpCZi3pIQEbElSKQmYt6SEBGxJUikJmLekhARsSVJC
+ArYkqZQEzFtSQgK2JKmUBMxbUkICtiSplATMW1JCArYkqZQEzFtSQgK2JCkh
+AVuSVEoC5i0pIQFbklRKAuYtKSEBW5JUSgLmLSkhAVuSlJCALUkqJQHzlpSQ
+gC1JKiUB85aUkIAtSSolzcWWeX2s53QaT/ce5mPLsvoBkcNXaA==\
+\>"],ExpressionUUID->"34e1e83e-1d92-4a50-97aa-52da0e8d1b17"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"disturbed", " ", "=", " ", 
+  RowBox[{"Disturb", "[", "stableConf", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7784464130187187`*^9, 3.778446436980036*^9}, 
+   3.778446716631015*^9, {3.778447321232184*^9, 3.778447323076076*^9}},
+ CellLabel->
+  "In[506]:=",ExpressionUUID->"fcdb94ee-3431-4903-9d23-a84b22433324"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "1", ",", "0", ",", "1", 
+   ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", 
+   "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", "0", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", 
+   "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "1", ",", 
+   "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+   "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+   "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", 
+   ",", "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", 
+   "0", ",", "0", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", 
+   ",", "0", ",", "0"}], "}"}]], "Output",
+ CellChangeTimes->{{3.7784464171766577`*^9, 3.778446442377224*^9}, 
+   3.778446717198885*^9, 3.7784473241940193`*^9, 3.778447584210314*^9, 
+   3.778448309970755*^9},
+ CellLabel->
+  "Out[506]=",ExpressionUUID->"6f475da1-ba69-49ce-8130-d12042ce2404"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"relaxation", " ", "=", " ", 
+   RowBox[{"Relax", "[", 
+    RowBox[{"4", ",", "disturbed"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ArrayPlot", "[", "relaxation", "]"}]}], "Input",
+ CellChangeTimes->{{3.778447297512682*^9, 3.7784473024466553`*^9}, {
+  3.778448430216332*^9, 3.7784484661524963`*^9}, {3.7784485728181477`*^9, 
+  3.778448578940815*^9}},
+ CellLabel->
+  "In[531]:=",ExpressionUUID->"c6597c3f-7afd-4637-b252-1c3314345101"],
+
+Cell[BoxData[
+ GraphicsBox[
+  RasterBox[{{1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1}, {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1}, {0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 
+   1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 
+   0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 
+   1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
+   1, 1, 1, 1, 1, 1}}, {{0, 0}, {100, 3}}, {0, 1}],
+  Frame->Automatic,
+  FrameLabel->{None, None},
+  FrameTicks->{{None, None}, {None, None}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->{920., Automatic},
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultPlotStyle" -> 
+    Automatic}]], "Output",
+ CellChangeTimes->{{3.778447302594112*^9, 3.778447327178643*^9}, 
+   3.7784483132916517`*^9, {3.7784484354270363`*^9, 3.778448466311655*^9}, 
+   3.7784485792807503`*^9},
+ CellLabel->
+  "Out[532]=",ExpressionUUID->"4a66e720-3459-48d3-8382-89962accbb1b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"relaxed", " ", "=", " ", 
+   RowBox[{"Last", "[", "relaxation", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ArrayPlot", "[", 
+  RowBox[{"CellularAutomaton", "[", 
+   RowBox[{"37", ",", "relaxed", ",", "100"}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7784485671587133`*^9, 3.778448599520672*^9}},
+ CellLabel->
+  "In[534]:=",ExpressionUUID->"f330a323-25e0-4a80-a8df-88ccb3c48c95"],
+
+Cell[BoxData[
+ GraphicsBox[RasterBox[CompressedData["
+1:eJzt0LEJwDAMBMBXNslKGcHEdfbv4sIZQZDiHh51D6dzPNc4kszVe7VW9mnL
+t5/GcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcPzakUor
+Yz+qlVEvRFoWvg==
+   "], {{0, 0}, {100, 101}}, {0, 1}],
+  Frame->Automatic,
+  FrameLabel->{None, None},
+  FrameTicks->{{None, None}, {None, None}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultPlotStyle" -> 
+    Automatic}]], "Output",
+ CellChangeTimes->{3.778448599947237*^9},
+ CellLabel->"Out[535]=",ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJzt3MEKgkAQxvEVC6LoUIfOvkjQqTrUQyyiKBFF+f7mjCkdO7nD8hccZtz5
+Dv68e/VNVdx9U+c+O738s6rzd3Z8vLpHaeJcUnX3LXPSt84NRa9aSjelOpVl
+KbfTrm9/j2RVh0JKEuX5VuqqHYDO027OpS5lc9N/n67bS1mEz4SVwRBDCzIY
+xi2DZugMmmjGL4MhhhZkMMQQGTRtZ9BEM34ZDDG0IIMhhsigaTuDJprxy2CI
+oQUZDDFEBk3bGTTRjF8GQwwtyGCIITJo2s6giWb8MhhiaEEGQwyRQdN2Bk00
+45fBcHLDtWzOpEvHTt/y8I9MoPRuzOjji9VNHQqb5zJr9/1tgh4Mf1dIPi9s
+1S4=\
+\>"],ExpressionUUID->"67e4553f-9219-46d0-9e87-22e59ab748dd"]
+}, Open  ]],
+
+Cell["\<\
+PUTA MADRE: Acabo de notar que por cada perturbaci\[OAcute]n que se le hace, \
+el tiempo de relajacion aumenta linealmente, lo que quiere decir que aqu\
+\[IAcute] nunca hay estados cr\[IAcute]ticos. Vale verga la vida. \
+\>", "Text",
+ CellChangeTimes->{{3.77844900251252*^9, 
+  3.7784491009000483`*^9}},ExpressionUUID->"1a16c5e7-65ae-4914-ab41-\
+4f36473e889e"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1861, 1013},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+Magnification:>1.1 Inherited,
+FrontEndVersion->"12.0 para Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 163, 3, 109, "Title",ExpressionUUID->"bf6b66a1-1bcf-4733-8098-afe7700b6d01"],
+Cell[746, 27, 170, 3, 60, "Subtitle",ExpressionUUID->"a1f0fc8c-8187-4043-b5e1-fcf45bd90f28"],
+Cell[919, 32, 273, 5, 54, "Input",ExpressionUUID->"21b76f3d-42f1-457c-bfee-eca3960e9bde",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1217, 41, 222, 4, 60, "Subtitle",ExpressionUUID->"9ec9427d-3a52-4e80-921c-c3f216c3fc22"],
+Cell[1442, 47, 3534, 86, 541, "Input",ExpressionUUID->"5865ed37-d493-46f3-b5c4-49c79427e2b0",
+ InitializationCell->True],
+Cell[4979, 135, 339, 7, 40, "Text",ExpressionUUID->"db7bf400-51a4-4cd9-8578-3378dd790086"],
+Cell[5321, 144, 747, 16, 36, "Input",ExpressionUUID->"24613078-7616-465e-b542-a278628136d1"],
+Cell[CellGroupData[{
+Cell[6093, 164, 1091, 27, 64, "Input",ExpressionUUID->"e3226a7e-788b-4333-8898-adfe01d8a494"],
+Cell[7187, 193, 83526, 2340, 558, "Output",ExpressionUUID->"d99151ed-0670-427f-99f6-73f39167d0c9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[90750, 2538, 463, 10, 34, "Input",ExpressionUUID->"113b95dd-b71e-49c2-89e9-137e40f68ba6"],
+Cell[91216, 2550, 1297, 19, 64, "Output",ExpressionUUID->"54958d7e-77ab-4414-9cbb-bf2c8df0765a"]
+}, Open  ]],
+Cell[92528, 2572, 420, 8, 39, "Text",ExpressionUUID->"6ea37b25-8cc8-441e-b8ed-eaa383a249fd"],
+Cell[92951, 2582, 1303, 34, 78, "Input",ExpressionUUID->"41d634e1-1177-4b0c-ae6c-5485ee235e59",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[94279, 2620, 516, 12, 34, "Input",ExpressionUUID->"c2231541-2458-42d1-a165-c667bcc49be7"],
+Cell[94798, 2634, 6167, 189, 166, "Output",ExpressionUUID->"2be2b12d-f6f8-44e4-b8e1-a8ba3cd1bd35"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[101002, 2828, 551, 12, 34, "Input",ExpressionUUID->"63cad57b-3cdc-4c4f-bbe2-caee11a56219"],
+Cell[101556, 2842, 1076, 17, 64, "Output",ExpressionUUID->"ba07199b-b2c3-4427-9f2d-4fd99e8ed280"]
+}, Open  ]],
+Cell[102647, 2862, 182, 3, 40, "Text",ExpressionUUID->"75aaf6d3-46d6-4424-affa-60988197e6a7"],
+Cell[CellGroupData[{
+Cell[102854, 2869, 623, 16, 34, "Input",ExpressionUUID->"9cdfc406-f555-479a-9578-1d573be94ad6"],
+Cell[103480, 2887, 65215, 1528, 2579, "Output",ExpressionUUID->"70a43185-ef7a-48f3-9f67-c8494d6c3a91"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[168744, 4421, 215, 4, 60, "Subtitle",ExpressionUUID->"df9086bc-c7bd-426a-858e-c352a198321d"],
+Cell[168962, 4427, 279, 7, 36, "Input",ExpressionUUID->"bdb157cf-b2fe-43f7-8915-fbcc7d282a81"],
+Cell[169244, 4436, 1614, 42, 136, "Input",ExpressionUUID->"4bbdd079-789f-49fe-96a6-e36784097911",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[170883, 4482, 299, 6, 36, "Input",ExpressionUUID->"75c08b70-6198-4c1c-bb5e-221e247030ac"],
+Cell[171185, 4490, 1207, 27, 418, "Output",ExpressionUUID->"062be307-3171-425e-bbd5-6d4a37462c29"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[172429, 4522, 335, 7, 36, "Input",ExpressionUUID->"834cf1da-beda-4c48-910e-b1b60f8587ef"],
+Cell[172767, 4531, 1302, 20, 68, "Output",ExpressionUUID->"63ac59f0-0684-437d-8dc7-acaeedc8465d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[174106, 4556, 279, 6, 36, "Input",ExpressionUUID->"ca1ec899-735d-4c10-b62f-f8b4f9677bcd"],
+Cell[174388, 4564, 1984, 40, 382, 836, 21, "CachedBoxData", "BoxData", "Output",ExpressionUUID->"34e1e83e-1d92-4a50-97aa-52da0e8d1b17"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[176409, 4609, 333, 6, 36, "Input",ExpressionUUID->"fcdb94ee-3431-4903-9d23-a84b22433324"],
+Cell[176745, 4617, 1357, 21, 68, "Output",ExpressionUUID->"6f475da1-ba69-49ce-8130-d12042ce2404"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[178139, 4643, 479, 10, 64, "Input",ExpressionUUID->"c6597c3f-7afd-4637-b252-1c3314345101"],
+Cell[178621, 4655, 1881, 35, 89, "Output",ExpressionUUID->"4a66e720-3459-48d3-8382-89962accbb1b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[180539, 4695, 427, 9, 64, "Input",ExpressionUUID->"f330a323-25e0-4a80-a8df-88ccb3c48c95"],
+Cell[180969, 4706, 1353, 30, 382, 804, 20, "CachedBoxData", "BoxData", "Output",ExpressionUUID->"67e4553f-9219-46d0-9e87-22e59ab748dd"]
+}, Open  ]],
+Cell[182337, 4739, 370, 7, 40, "Text",ExpressionUUID->"1a16c5e7-65ae-4914-ab41-4f36473e889e"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
